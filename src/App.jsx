@@ -2437,7 +2437,7 @@ function App() {
     <div className="app-shell">
       <aside className="sidebar">
         <button type="button" className="brand" onClick={() => resetToList(role === 'Compras' ? 'orders' : 'cases')} aria-label="Abrir casos">
-          <img src="/casa-pellas-symbol.png" alt="" />
+          <img src={`${import.meta.env.BASE_URL}casa-pellas-symbol.png`} alt="" />
           <div>
             <strong>APEX</strong>
             <span>Pedidos Especiales</span>
