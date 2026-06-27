@@ -1075,13 +1075,11 @@ function canAttemptCloseCase(role, currentCase, activeUser) {
   return Boolean(currentCase && currentCase.state !== 'Cerrado' && (
     role === 'Administrador funcional'
     || role === 'Jefatura técnica'
-    || role === 'Compras'
     || (role === 'Responsable de atención' && (currentCase.registeredBy === activeUser.name || currentCase.owner === activeUser.name))
   ))
 }
 
 function canCloseCase(role, currentCase, activeUser) {
-  if (role === 'Compras') return Boolean(currentCase && currentCase.state !== 'Cerrado')
   return canAttemptCloseCase(role, currentCase, activeUser)
     && currentCase.otExecutionApproved
     && numericValue(currentCase.availability) === 100
@@ -1607,10 +1605,8 @@ function App() {
       } : current)
       const eventName = requiresReason ? 'Cambio de fecha SE' : 'Asignación de fecha SE'
       const eventReason = requiresReason ? (values.reason || 'Cambio de fecha') : 'Fecha nueva'
-      if (eventReason !== 'Otro') {
-        addPEBitacora(currentPE.id, eventName, currentPE.eta, nextEta, eventReason, values.comment || `Fecha ${nextDate} asignada a ${linesToUpdate.length} linea(s)`)
-        addCaseBitacora(currentPE.caseId, eventName, currentPE.eta, nextEta, eventReason, `SE ${currentPE.id}: fecha ${nextDate} asignada a ${linesToUpdate.length} linea(s)`)
-      }
+      addPEBitacora(currentPE.id, eventName, currentPE.eta, nextEta, eventReason, values.comment || `Fecha ${nextDate} asignada a ${linesToUpdate.length} linea(s)`)
+      addCaseBitacora(currentPE.caseId, eventName, currentPE.eta, nextEta, eventReason, `SE ${currentPE.id}: fecha ${nextDate} asignada a ${linesToUpdate.length} linea(s)`)
       showToast('Se actualizo', 5000)
       return
     }
@@ -2269,7 +2265,7 @@ function App() {
       const [prefix, description] = parts[(index + seed) % parts.length]
       const required = (index % 4) + 1
       const shortage = index % 3
-      const available = Math.max(required - shortage, 0)
+      const available = index === 1 ? required + 1 : Math.max(required - shortage, 0)
       const missing = required - available
       return {
         item: String(index + 1).padStart(3, '0'),
@@ -2965,6 +2961,8 @@ function ProformasTab({ role, proformasData, selectedProformaId, currentCase, on
   const unauthorizedTotal = selectedLines.filter((line) => line.authorization === 'No autorizado').reduce((sum, line) => sum + line.required, 0)
   const eligibleTotal = selectedLines.filter((line) => line.eligible === 'Si').reduce((sum, line) => sum + line.missing, 0)
   const selectedPELines = selectedPELinesForProforma(selectedProforma)
+  const hasOverAvailableLine = selectedLines.some((line) => numericValue(line.available) > numericValue(line.required))
+  const hasPartialLine = selectedLines.some((line) => line.state === 'Parcial')
   const selectedProformaCanAdvance = hiddenDamageCanAdvanceInventory(currentCase, selectedProforma)
   const canEditLines = canEditProformaDetail(role, currentCase, selectedProforma)
   const canConfirmAvailability = selectedProformaCanAdvance && (role === 'Administrador funcional' || role === 'Inventario') && currentCase.state === 'En validación' && !selectedProforma?.availabilityConfirmed
@@ -3130,6 +3128,9 @@ function ProformasTab({ role, proformasData, selectedProformaId, currentCase, on
         </div>
         {!selectedProformaCanAdvance && (
           <div className="notice"><AlertTriangle size={16} /> Complete y envie el expediente del daño oculto a Inventario para avanzar con disponibilidad o Solicitud especial.</div>
+        )}
+        {canConfirmAvailability && (hasOverAvailableLine || hasPartialLine) && (
+          <div className="notice"><AlertTriangle size={16} /> Revise cantidades: hay lineas parciales o disponibilidad mayor a requerida.</div>
         )}
         {selectedProforma?.availabilityConfirmed && <div className="notice"><Lock size={16} /> Disponibilidad confirmada. El detalle queda bloqueado para Inventario.</div>}
         {currentCase.otExecutionApproved && <div className="notice"><CheckCircle2 size={16} /> Orden interna marcada en ejecucion por Jefatura técnica.</div>}
