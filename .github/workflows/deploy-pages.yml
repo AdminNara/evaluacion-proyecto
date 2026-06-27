@@ -1,4 +1,4 @@
-name: Deploy APEX Mockup to GitHub Pages
+name: Deploy Evaluacion Proyecto to GitHub Pages
 
 on:
   push:
@@ -36,34 +36,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Prepare Pages package
-        run: |
-          mkdir -p dist-site/demo_apex_casapellas
-          cp -a dist/. dist-site/demo_apex_casapellas/
-          rm -f dist-site/demo_apex_casapellas/CNAME
-          printf 'demo.naraconsultores.com\n' > dist-site/CNAME
-          cat > dist-site/index.html <<'EOF'
-          <!doctype html>
-          <html lang="es">
-            <head>
-              <meta charset="UTF-8" />
-              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-              <meta http-equiv="refresh" content="0; url=https://www.naraconsultores.com/" />
-              <title>Nara Consultores</title>
-              <script>
-                window.location.replace('https://www.naraconsultores.com/')
-              </script>
-            </head>
-            <body>
-              <a href="https://www.naraconsultores.com/">Abrir Nara Consultores</a>
-            </body>
-          </html>
-          EOF
-
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist-site
+          path: dist
 
   deploy:
     environment:
