@@ -1186,17 +1186,6 @@ function patchDocumentAt(documents, target, updater) {
   return next
 }
 
-function downloadHrefFor(document) {
-  if (document?.url) return document.url
-  const content = [
-    document?.title || 'Documento',
-    `Referencia: ${document?.reference || 'Sin referencia'}`,
-    `Descripcion: ${document?.description || 'Sin descripcion'}`,
-    document?.preview || 'Documento demo del expediente.',
-  ].join('\n')
-  return `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`
-}
-
 function App() {
   const [casesData, setCasesData] = useState(() => cases.map(normalizeCaseFiniquito))
   const [ordersData, setOrdersData] = useState(specialOrders)
@@ -1546,7 +1535,6 @@ function App() {
       addPEBitacora(nextId, 'Solicitud generada', '-', nextId, 'Lineas seleccionadas por jefatura', 'Solicitud enviada a Inventario para referencia externa')
       addCaseBitacora(currentCase.id, 'Solicitud generada', '-', nextId, 'Lineas seleccionadas por jefatura', `Disponibilidad recalculada a ${availabilityBase}% excluyendo faltantes no enviados a SE`)
       showToast('Solicitud enviada a Inventario para referencia externa', 5000)
-      window.setTimeout(() => setModal('Continuar reparación'), 0)
       return
     }
 
@@ -1785,7 +1773,7 @@ function App() {
         updated: 'Ahora',
       } : item))
       setSelectedCase((current) => current ? { ...current, state: 'En validación', nextAction: 'Inventario valida disponibilidades', updated: 'Ahora' } : current)
-      addCaseBitacora(currentCase.id, 'Expediente enviado a Inventario', 'Expediente pendiente', 'En validación', 'Responsable confirma expediente', 'Solicitud enviada a Inventario')
+      addCaseBitacora(currentCase.id, 'Expediente enviado a Inventario', 'Expediente pendiente', 'En validación', 'Responsable de atención confirma expediente', 'Solicitud enviada a Inventario')
       showToast('Se proceso el expediente', 10000)
       return
     }
@@ -2454,6 +2442,8 @@ function App() {
           onBack={() => selectedCase ? resetToList('cases') : resetToList('orders')}
           onOpenDrawer={setDrawer}
           onModal={setModal}
+          onProceedOT={() => handleProceedOT({})}
+          onCloseCase={() => handleModalConfirm('Cerrar caso', {})}
         />
 
         {section === 'cases' && !selectedCase && (
@@ -2494,8 +2484,9 @@ function App() {
             onLoadDocument={handleLoadDocument}
             onUpdateDocumentMeta={handleUpdateDocumentMeta}
             onRemoveDocument={handleRemoveDocument}
-            onMarkExpedienteComplete={() => setModal('Marcar expediente como completo')}
+            onMarkExpedienteComplete={() => handleModalConfirm('Marcar expediente como completo', {})}
             onMarkHiddenDamageComplete={handleMarkHiddenDamageComplete}
+            onConfirmAvailability={handleConfirmAvailability}
             onOpenPE={openPE}
             onOpenPEBitacora={openPEBitacora}
             onRegisterReference={openReferenceRegistration}
@@ -2552,7 +2543,7 @@ function NavButton({ active, icon: Icon, label, onClick }) {
   )
 }
 
-function TopBar({ title, section, role, activeUser, currentCase, ordersData, proformasData, selectedCase, selectedPE, onBack, onOpenDrawer, onModal }) {
+function TopBar({ title, section, role, activeUser, currentCase, ordersData, proformasData, selectedCase, selectedPE, onBack, onOpenDrawer, onProceedOT, onCloseCase }) {
   const insideWorkspace = selectedCase || selectedPE
   const showProceedOT = selectedCase && canProceedOTAtCaseLevel(role, currentCase, ordersData, proformasData)
   const showCloseCase = selectedCase && canAttemptCloseCase(role, currentCase, activeUser)
@@ -2574,7 +2565,7 @@ function TopBar({ title, section, role, activeUser, currentCase, ordersData, pro
         {insideWorkspace && (
           <>
             {showProceedOT && (
-              <button type="button" className="primary" onClick={() => onModal('Continuar reparación')}>
+              <button type="button" className="primary" onClick={onProceedOT}>
                 <CheckCircle2 size={16} /> Proceder con orden interna
               </button>
             )}
@@ -2584,7 +2575,7 @@ function TopBar({ title, section, role, activeUser, currentCase, ordersData, pro
                 className={`primary ${closeCaseEnabled ? '' : 'disabled'}`}
                 disabled={!closeCaseEnabled}
                 title={closeCaseEnabled ? 'Cerrar caso' : 'Disponible con disponibilidad completa del caso y Orden interna en ejecución'}
-                onClick={() => onModal('Cerrar caso')}
+                onClick={onCloseCase}
               >
                 {closeCaseEnabled ? <CheckCircle2 size={16} /> : <Lock size={16} />} Cerrar caso
               </button>
@@ -2610,8 +2601,8 @@ function CasesList({ role, casesData, caseFilters, filtersOpen, setFiltersOpen, 
   const columns = [
     'No. caso',
     'Cliente',
-    'Vehiculo / placa',
-    'Responsable',
+    'Unidad / identificador',
+    'Responsable de atención',
     'Estado',
     'Disponibilidad',
     'Solicitudes abiertas',
@@ -2671,15 +2662,15 @@ function CasesList({ role, casesData, caseFilters, filtersOpen, setFiltersOpen, 
   )
 }
 
-function CaseWorkspace({ role, activeUser, ordersData, proformasData, selectedProformaId, currentCase, tab, setTab, onModal, onDrawer, onSelectProforma, onRenameProforma, onLoadExcelDetail, onClearProformaDetail, onAddAdditionalDocument, onAddHiddenDamage, onAddFiniquito, onRequestAvailabilityValidation, onProformaLineChange, onPrepareSpecialOrder, onLoadDocument, onUpdateDocumentMeta, onRemoveDocument, onMarkExpedienteComplete, onMarkHiddenDamageComplete, onOpenPE, onOpenPEBitacora, onRegisterReference }) {
+function CaseWorkspace({ role, activeUser, ordersData, proformasData, selectedProformaId, currentCase, tab, setTab, onModal, onDrawer, onSelectProforma, onRenameProforma, onLoadExcelDetail, onClearProformaDetail, onAddAdditionalDocument, onAddHiddenDamage, onAddFiniquito, onRequestAvailabilityValidation, onProformaLineChange, onPrepareSpecialOrder, onLoadDocument, onUpdateDocumentMeta, onRemoveDocument, onMarkExpedienteComplete, onMarkHiddenDamageComplete, onConfirmAvailability, onOpenPE, onOpenPEBitacora, onRegisterReference }) {
   const visibleTabs = visibleCaseTabsFor(currentCase, ordersData, proformasData)
   const activeTab = visibleTabs.includes(tab) ? tab : 'Expediente'
   const hasFiniquito = caseHasFiniquito(currentCase)
   const finiquitosCount = caseFiniquitosCount(currentCase)
   const facts = [
     ['Cliente', currentCase.client],
-    ['Vehiculo', `${currentCase.vehicle} | ${currentCase.plate}`],
-    ['Responsable', currentCase.owner],
+    ['Unidad', `${currentCase.vehicle} | ${currentCase.plate}`],
+    ['Responsable de atención', currentCase.owner],
     ['Estado', currentCase.state],
     ['Disponibilidad', `${currentCase.availability}%`],
     ['Solicitudes abiertas', currentCase.openPE],
@@ -2697,21 +2688,20 @@ function CaseWorkspace({ role, activeUser, ordersData, proformasData, selectedPr
       <Tabs tabs={visibleTabs} active={activeTab} onChange={setTab} />
       <div className="tab-panel">
         {activeTab === 'Expediente' && <ExpedienteTab role={role} activeUser={activeUser} currentCase={currentCase} proformasData={proformasData} onAddAdditionalDocument={onAddAdditionalDocument} onAddHiddenDamage={onAddHiddenDamage} onAddFiniquito={onAddFiniquito} onLoadDocument={onLoadDocument} onUpdateDocumentMeta={onUpdateDocumentMeta} onRemoveDocument={onRemoveDocument} onMarkExpedienteComplete={onMarkExpedienteComplete} onMarkHiddenDamageComplete={onMarkHiddenDamageComplete} />}
-        {activeTab === 'Proformas' && <ProformasTab role={role} proformasData={proformasData} selectedProformaId={selectedProformaId} currentCase={currentCase} onSelectProforma={onSelectProforma} onRenameProforma={onRenameProforma} onLoadExcelDetail={onLoadExcelDetail} onClearProformaDetail={onClearProformaDetail} onRequestAvailabilityValidation={onRequestAvailabilityValidation} onProformaLineChange={onProformaLineChange} onPrepareSpecialOrder={onPrepareSpecialOrder} onModal={onModal} onDrawer={onDrawer} />}
+        {activeTab === 'Proformas' && <ProformasTab role={role} proformasData={proformasData} selectedProformaId={selectedProformaId} currentCase={currentCase} onSelectProforma={onSelectProforma} onRenameProforma={onRenameProforma} onLoadExcelDetail={onLoadExcelDetail} onClearProformaDetail={onClearProformaDetail} onRequestAvailabilityValidation={onRequestAvailabilityValidation} onProformaLineChange={onProformaLineChange} onPrepareSpecialOrder={onPrepareSpecialOrder} onConfirmAvailability={onConfirmAvailability} onModal={onModal} onDrawer={onDrawer} />}
         {activeTab === 'Solicitudes especiales' && <CasePETab role={role} ordersData={ordersData} currentCase={currentCase} onOpenPE={onOpenPE} onOpenPEBitacora={onOpenPEBitacora} onRegisterReference={onRegisterReference} />}
       </div>
     </section>
   )
 }
 
-function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAdditionalDocument, onAddHiddenDamage, onAddFiniquito, onLoadDocument, onUpdateDocumentMeta, onRemoveDocument, onMarkExpedienteComplete, onMarkHiddenDamageComplete }) {
+function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAdditionalDocument, onAddHiddenDamage, onAddFiniquito, onLoadDocument, onMarkExpedienteComplete, onMarkHiddenDamageComplete }) {
   const [previewDocument, setPreviewDocument] = useState(null)
   const [expandedGroups, setExpandedGroups] = useState({ base: true, additional: true })
   const documents = normalizeDocuments(currentCase.documents)
   const canManageDocuments = canManageCaseDocuments(role, currentCase, activeUser)
   const canAddDocuments = canManageDocuments && (role === 'Administrador funcional' || currentCase.state !== 'Cerrado')
   const canEditDocuments = role === 'Administrador funcional' || role === 'Logística' || (canManageDocuments && currentCase.state === 'Expediente pendiente')
-  const canDeleteDocuments = role === 'Administrador funcional' || (canManageDocuments && currentCase.state === 'Expediente pendiente')
   const canAddDamage = canAddHiddenDamageDocuments(role, currentCase, activeUser)
   const canAddFiniquito = canAddFiniquitoDocument(role, currentCase, proformasData)
   const baseDocuments = Object.entries(baseDocumentMeta)
@@ -2819,7 +2809,7 @@ function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAddi
     <div className="stack expediente-workspace">
       <div className="document-tray-toolbar">
         <div>
-          <h3>Bandeja documental</h3>
+          <h3>Expediente digital</h3>
           <p>Expediente base y soportes agrupados para mantener el caso legible.</p>
         </div>
         <div className="document-summary" aria-label="Resumen documental">
@@ -2870,12 +2860,8 @@ function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAddi
                         title={title}
                         document={document}
                         target={target}
-                        canEdit={canUpdateDocument(target, document)}
-                        canUpload={canUpdateDocument(target, document)}
-                        canDelete={canDeleteDocuments}
+                        canUpload={canUpdateDocument(target, document) && !hasDocumentFile(document)}
                         onLoadDocument={onLoadDocument}
-                        onUpdateDocumentMeta={onUpdateDocumentMeta}
-                        onRemoveDocument={onRemoveDocument}
                         onPreview={setPreviewDocument}
                       />
                     ))}
@@ -2892,12 +2878,11 @@ function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAddi
   )
 }
 
-function DocumentArchiveCard({ title, document, target, canEdit, canUpload, canDelete, onLoadDocument, onUpdateDocumentMeta, onRemoveDocument, onPreview }) {
+function DocumentArchiveCard({ title, document, target, canUpload, onLoadDocument, onPreview }) {
   const status = getDocumentStatus(document)
   const loaded = hasDocumentFile(document)
   const inputId = `file-${target.scope}-${target.setId || ''}-${target.key || target.id || 'document'}`
   const tone = status === 'Pendiente' ? 'gray' : status === 'Requiere correccion' ? 'orange' : 'green'
-  const canRemove = canDelete && (loaded || target.scope === 'additional')
   return (
     <article className={`document-row ${loaded ? 'loaded' : ''}`}>
       <div className="document-row-main">
@@ -2912,11 +2897,11 @@ function DocumentArchiveCard({ title, document, target, canEdit, canUpload, canD
       </div>
       <label className="document-row-field">
         <span>Referencia</span>
-        <input value={document.reference || ''} placeholder={document.referencePlaceholder || 'Referencia'} disabled={!canEdit} onChange={(event) => onUpdateDocumentMeta(target, 'reference', event.target.value)} />
+        <input value={document.reference || ''} placeholder={document.referencePlaceholder || 'Referencia'} disabled readOnly />
       </label>
       <label className="document-row-field description">
         <span>Descripción</span>
-        <input value={document.description || ''} disabled={!canEdit} onChange={(event) => onUpdateDocumentMeta(target, 'description', event.target.value)} />
+        <input value={document.description || ''} disabled readOnly />
       </label>
       <button type="button" className="document-preview-tile" disabled={!loaded} onClick={() => loaded && onPreview(document)}>
         <FileCheck2 size={18} />
@@ -2926,14 +2911,10 @@ function DocumentArchiveCard({ title, document, target, canEdit, canUpload, canD
         {canUpload && (
           <>
             <input id={inputId} className="file-input" type="file" onChange={(event) => onLoadDocument(target, event.target.files?.[0])} />
-            <label className="doc-load" htmlFor={inputId}><Upload size={14} /> {loaded ? 'Reemplazar' : 'Cargar'}</label>
+            <label className="doc-load" htmlFor={inputId}><Upload size={14} /> Cargar</label>
           </>
         )}
         {loaded && <button type="button" className="secondary compact-action" onClick={() => onPreview(document)}><Eye size={14} /> Ampliar</button>}
-        {loaded && <a className="secondary compact-action" href={downloadHrefFor(document)} download={document.fileName || `${document.reference || 'documento'}.txt`}><Download size={14} /> Descargar</a>}
-        {canRemove && (
-          <button type="button" className="doc-remove-inline" onClick={() => onRemoveDocument(target)}><X size={14} /> Eliminar</button>
-        )}
       </div>
     </article>
   )
@@ -2963,7 +2944,6 @@ function DocumentPreviewModal({ document, onClose }) {
           </div>
         </div>
         <footer>
-          <a className="primary" href={downloadHrefFor(document)} download={document.fileName || `${document.reference || 'documento'}.txt`}><Download size={16} /> Descargar</a>
           <button type="button" className="secondary" onClick={onClose}>Cerrar</button>
         </footer>
       </section>
@@ -2971,7 +2951,7 @@ function DocumentPreviewModal({ document, onClose }) {
   )
 }
 
-function ProformasTab({ role, proformasData, selectedProformaId, currentCase, onSelectProforma, onRenameProforma, onLoadExcelDetail, onClearProformaDetail, onRequestAvailabilityValidation, onProformaLineChange, onPrepareSpecialOrder, onModal, onDrawer }) {
+function ProformasTab({ role, proformasData, selectedProformaId, currentCase, onSelectProforma, onRenameProforma, onLoadExcelDetail, onClearProformaDetail, onRequestAvailabilityValidation, onProformaLineChange, onPrepareSpecialOrder, onConfirmAvailability, onModal, onDrawer }) {
   const [proformaDrafts, setProformaDrafts] = useState({})
   const caseProformas = proformasData.filter((item) => item.caseId === currentCase.id)
   const visibleProformas = role === 'Jefatura técnica' ? caseProformas.filter(isConfirmedValidProforma) : caseProformas
@@ -3139,7 +3119,7 @@ function ProformasTab({ role, proformasData, selectedProformaId, currentCase, on
         <div className="action-strip wrap">
           <a className="secondary proforma-template-link" href={proformaTemplateHref()} download="plantilla-detalle-proforma.csv"><Download size={16} /> Descargar plantilla</a>
           {role !== 'Responsable de atención' && role !== 'Jefatura técnica' && currentCase.state !== 'En validación' && can(role, 'Solicitar validacion disponibilidad') && <button type="button" className="primary" onClick={onRequestAvailabilityValidation}><ClipboardCheck size={16} /> Solicitar validacion</button>}
-          {canConfirmAvailability && <button type="button" className="primary" onClick={() => onModal('Confirmar disponibilidad')}><CheckCircle2 size={16} /> Confirmar Disponibilidad</button>}
+          {canConfirmAvailability && <button type="button" className="primary" onClick={onConfirmAvailability}><CheckCircle2 size={16} /> Confirmar Disponibilidad</button>}
           {canPrepareSpecialOrder && <button type="button" className="primary" onClick={() => onPrepareSpecialOrder(selectedProforma.id)}><Boxes size={16} /> Preparar solicitud especial</button>}
           {canGenerateSpecialOrder && <button type="button" className="primary" onClick={() => onModal('Generar solicitud especial')}><Boxes size={16} /> Generar solicitud especial</button>}
           {!hideOperationalButtons && can(role, 'Registrar disponibilidad') && <button type="button" className="secondary" onClick={() => onModal('Registrar disponibilidad')}><ClipboardCheck size={16} /> Disponibilidad</button>}
@@ -3784,9 +3764,9 @@ function getModalBody(name, role, formValues, setFormValues, currentPE, currentC
     )
   }
   if (name === 'Cerrar caso') {
-    return <ModalFields fields={['Caso', 'Estado actual', 'Responsable', 'Comentario']} notice="Procesar actualizara el caso." />
+    return <ModalFields fields={['Caso', 'Estado actual', 'Responsable de atención', 'Comentario']} notice="Procesar actualizara el caso." />
   }
-  return <ModalFields fields={['Caso / SE', 'Responsable', 'Fecha/hora', 'Comentario', `Rol activo: ${role}`]} />
+  return <ModalFields fields={['Caso / SE', 'Responsable de atención', 'Fecha/hora', 'Comentario', `Rol activo: ${role}`]} />
 }
 
 function updateValue(setValues, key, value) {
@@ -3810,7 +3790,7 @@ function CreateCaseFields({ values, setValues }) {
           <input value={values.email} onChange={(event) => updateValue(setValues, 'email', event.target.value)} placeholder="cliente@email.com" />
         </label>
         <label>
-          <span>Vehiculo</span>
+          <span>Unidad</span>
           <input value={values.vehicle} onChange={(event) => updateValue(setValues, 'vehicle', event.target.value)} placeholder="Unidad SUV 2024" />
         </label>
         <label>
@@ -4049,7 +4029,7 @@ function DateFields({ values, setValues, currentPE, peLinesData, reasons }) {
           <input value={values.comment} onChange={(event) => updateValue(setValues, 'comment', event.target.value)} placeholder="Comentario de Compras" />
         </label>
       </div>
-      <div className="notice"><AlertTriangle size={16} /> La fecha se aplicara a las lineas seleccionadas y se notificara al Responsable del caso.</div>
+      <div className="notice"><AlertTriangle size={16} /> La fecha se aplicara a las lineas seleccionadas y se notificara al Responsable de atención.</div>
     </>
   )
 }
