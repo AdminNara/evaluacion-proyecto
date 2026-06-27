@@ -172,7 +172,7 @@ function canClearProformaDetail(role, currentCase, proforma) {
 }
 
 function canRegisterReferenceForPE(role, pe) {
-  return (role === 'Inventario' || role === 'Administrador funcional') && pe?.state === 'Generada'
+  return (role === 'Inventario' || role === 'Administrador funcional') && Boolean(pe) && !isPEComplete(pe)
 }
 
 function isPEComplete(pe) {
@@ -238,7 +238,7 @@ function selectedDateAssignmentRequiresReason(linesList) {
 }
 
 function receiptCaptureValue(line) {
-  return Math.min(numericValue(line.requested), numericValue(line.receivedDraft ?? line.received))
+  return numericValue(line.receivedDraft ?? line.received)
 }
 
 function selectedPELinesReadyForReceipt(linesList) {
@@ -250,13 +250,13 @@ function selectedPELinesReadyForReceipt(linesList) {
 }
 
 function canManagePEReceipt(role) {
-  return role === 'Compras' || role === 'Logística' || role === 'Administrador funcional' || role === 'Inventario'
+  return role === 'Compras' || role === 'Logística' || role === 'Cierre administrativo' || role === 'Administrador funcional' || role === 'Inventario'
 }
 
 function hasInvalidReceiptCapture(line) {
   if (!line.selected || line.pending === 0) return false
   const captured = receiptCaptureValue(line)
-  return !parseDateValue(line.estimatedDate) || captured <= 0 || captured <= numericValue(line.received)
+  return !parseDateValue(line.estimatedDate) || captured <= 0 || captured <= numericValue(line.received) || captured > numericValue(line.requested)
 }
 
 function daysUntilDate(value) {
@@ -1056,6 +1056,7 @@ function isExpedienteRestricted(caseItem) {
 function canManageCaseDocuments(role, currentCase, activeUser) {
   if (role === 'Administrador funcional' || role === 'Jefatura técnica') return true
   if (role === 'Compras') return true
+  if (role === 'Logística') return true
   return role === 'Responsable de atención' && (currentCase.registeredBy === activeUser.name || currentCase.owner === activeUser.name)
 }
 
@@ -1217,6 +1218,7 @@ function App() {
   const [drawer, setDrawer] = useState(null)
   const [filtersOpen, setFiltersOpen] = useState(true)
   const [orderFiltersOpen, setOrderFiltersOpen] = useState(true)
+  const [filterResetKey, setFilterResetKey] = useState(0)
   const toastTimer = useRef(null)
 
   const activeUser = getActiveUser(role, usersCatalog)
@@ -1275,6 +1277,7 @@ function App() {
   }
 
   function resetToList(target) {
+    setFilterResetKey((current) => current + 1)
     if (target === 'cases') {
       setSelectedCase(null)
       setSection('cases')
@@ -1409,8 +1412,8 @@ function App() {
       const clientAssumes = Boolean(values.clientAssumes)
       const nextCase = {
         id: nextId,
-        client: values.client || 'Cliente nuevo',
-        vehicle: values.vehicle || 'Vehiculo pendiente',
+        client: values.client,
+        vehicle: values.vehicle,
         plate: values.plate || 'Sin placa',
         insurer: clientAssumes ? '' : values.insurer,
         clientAssumes,
@@ -1586,7 +1589,7 @@ function App() {
         return
       }
       const requiresReason = selectedDateAssignmentRequiresReason(peLinesData)
-      const nextDate = values.newDate || '20/09/2026'
+      const nextDate = values.newDate || '2026-06-20'
       const nextLines = normalizePELines(peLinesData).map((line) => {
         if (!line.selected || line.pending === 0) return line
         return {
@@ -1666,8 +1669,9 @@ function App() {
           note: values.comment || line.note,
         }
       })
-      const nextPEAvailability = peAvailabilityFromLines(nextLines)
-      const complete = nextLines.every((line) => line.pending === 0)
+      const forceComplete = values.receivedMode === 'Completa'
+      const nextPEAvailability = forceComplete ? 100 : peAvailabilityFromLines(nextLines)
+      const complete = forceComplete || nextLines.every((line) => line.pending === 0)
       const nextState = complete ? 'Recibida completa' : 'Recibida parcial'
       const nextPending = nextLines.filter((line) => line.pending > 0).length
       const previousCaseAvailability = numericValue(relatedCaseBefore?.availability)
@@ -2221,13 +2225,14 @@ function App() {
     setPeLinesData((current) => normalizePELines(current).map((line, index) => {
       if (index !== lineIndex) return line
       if (field === 'requiredByWorkshop' && !(role === 'Inventario' || role === 'Administrador funcional')) return line
-      if (field === 'lineOc' && !(role === 'Compras' || role === 'Administrador funcional')) return line
+      if (field === 'lineOc' && !(role === 'Compras' || role === 'Administrador funcional' || role === 'Inventario')) return line
+      if (field === 'note' && !(role === 'Compras' || role === 'Logística' || role === 'Cierre administrativo' || role === 'Administrador funcional')) return line
       if (field === 'lineOc' && (line.state === 'Completo' || line.pending === 0)) return line
       if (field === 'received' && (!canManagePEReceipt(role) || !line.selected)) return line
       if (field === 'received') {
         return {
           ...line,
-          receivedDraft: Math.min(line.requested, numericValue(value)),
+          receivedDraft: numericValue(value),
         }
       }
       if (field === 'lineOc') {
@@ -2458,6 +2463,7 @@ function App() {
             caseFilters={caseFiltersData}
             filtersOpen={filtersOpen}
             setFiltersOpen={setFiltersOpen}
+            filterResetKey={filterResetKey}
             onOpenCase={openCase}
             onModal={setModal}
           />
@@ -2497,7 +2503,7 @@ function App() {
         )}
 
         {section === 'orders' && !selectedPE && (
-          <OrdersList role={role} ordersData={ordersData} filtersOpen={orderFiltersOpen} setFiltersOpen={setOrderFiltersOpen} onOpenPE={openPE} onOpenCase={openCase} onRegisterReference={openReferenceRegistration} />
+          <OrdersList role={role} ordersData={ordersData} filtersOpen={orderFiltersOpen} setFiltersOpen={setOrderFiltersOpen} filterResetKey={filterResetKey} onOpenPE={openPE} onOpenCase={openCase} onRegisterReference={openReferenceRegistration} />
         )}
 
         {section === 'orders' && selectedPE && (
@@ -2593,7 +2599,7 @@ function TopBar({ title, section, role, activeUser, currentCase, ordersData, pro
   )
 }
 
-function CasesList({ role, casesData, caseFilters, filtersOpen, setFiltersOpen, onOpenCase, onModal }) {
+function CasesList({ role, casesData, caseFilters, filtersOpen, setFiltersOpen, filterResetKey, onOpenCase, onModal }) {
   const showFiniquitoColumn = casesData.some(caseHasFiniquito)
   const showFiniquitoCountColumn = casesData.some((item) => caseFiniquitosCount(item) > 1)
   const openCases = casesData.filter((item) => item.state !== 'Cerrado').length
@@ -2634,7 +2640,7 @@ function CasesList({ role, casesData, caseFilters, filtersOpen, setFiltersOpen, 
       </div>
 
       {filtersOpen && (
-        <FilterGrid filters={caseFilters} />
+        <FilterGrid key={`case-filters-${filterResetKey}`} filters={caseFilters} />
       )}
 
       <div className="summary-band">
@@ -2652,12 +2658,12 @@ function CasesList({ role, casesData, caseFilters, filtersOpen, setFiltersOpen, 
           item.client,
           `${item.vehicle} | ${item.plate}`,
           item.owner,
-          <Pill key="state" tone="blue">{item.state}</Pill>,
-          <Progress key="progress" value={item.availability} />,
-          item.openPE,
+          <Pill key="state" tone={caseStateTone(item.state)}>{displayCaseState(item.state)}</Pill>,
+          <span key="progress" style={{ display: 'block', textAlign: item.availability === 100 ? 'left' : 'center' }}><Progress value={item.availability} /></span>,
+          <span key="open-pe" style={{ display: 'block', textAlign: item.openPE > 0 ? 'left' : 'center' }}>{item.openPE}</span>,
           ...(showFiniquitoColumn ? [caseHasFiniquito(item) ? <Pill key="compromiso pendiente" tone="orange">Si</Pill> : ''] : []),
           ...(showFiniquitoCountColumn ? [caseFiniquitosCount(item) > 1 ? caseFiniquitosCount(item) : ''] : []),
-          item.updated,
+          <span key="updated" style={{ display: 'block', textAlign: item.updated.includes('10:') ? 'center' : 'left' }}>{item.updated}</span>,
           <button key="open" type="button" className="row-action" onClick={() => onOpenCase(item)}>Abrir <ChevronRight size={14} /></button>,
         ])}
       />
@@ -2704,7 +2710,7 @@ function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAddi
   const documents = normalizeDocuments(currentCase.documents)
   const canManageDocuments = canManageCaseDocuments(role, currentCase, activeUser)
   const canAddDocuments = canManageDocuments && (role === 'Administrador funcional' || currentCase.state !== 'Cerrado')
-  const canEditDocuments = role === 'Administrador funcional' || (canManageDocuments && currentCase.state === 'Expediente pendiente')
+  const canEditDocuments = role === 'Administrador funcional' || role === 'Logística' || (canManageDocuments && currentCase.state === 'Expediente pendiente')
   const canDeleteDocuments = role === 'Administrador funcional' || (canManageDocuments && currentCase.state === 'Expediente pendiente')
   const canAddDamage = canAddHiddenDamageDocuments(role, currentCase, activeUser)
   const canAddFiniquito = canAddFiniquitoDocument(role, currentCase, proformasData)
@@ -3166,12 +3172,12 @@ function CasePETab({ role, ordersData, currentCase, onOpenPE, onOpenPEBitacora, 
         rows={caseOrders.map((item) => [
           item.id,
           item.proforma,
-          <Pill key="state" tone="blue">{item.state}</Pill>,
+          <Pill key="state" tone={orderStateTone(item.state)}>{displayOrderState(item.state)}</Pill>,
           item.jde,
           item.oc,
-          item.eta,
-          <Progress key="progress" value={item.availability} />,
-          item.pendingLines,
+          <span key="eta" style={{ display: 'block', textAlign: item.eta === 'Sin fecha' ? 'left' : 'center' }}>{item.eta}</span>,
+          <span key="progress" style={{ display: 'block', textAlign: item.availability >= 75 ? 'left' : 'center' }}><Progress value={item.availability} /></span>,
+          <span key="pending" style={{ display: 'block', textAlign: item.pendingLines > 1 ? 'left' : 'center' }}>{item.pendingLines}</span>,
           <div key="actions" className="row-actions">
             <button type="button" className="row-action" onClick={() => onOpenPE(item)}>Abrir solicitud</button>
             <button type="button" className="row-action" onClick={() => onOpenPEBitacora(item)}>Bitacora</button>
@@ -3183,7 +3189,7 @@ function CasePETab({ role, ordersData, currentCase, onOpenPE, onOpenPEBitacora, 
   )
 }
 
-function OrdersList({ role, ordersData, filtersOpen, setFiltersOpen, onOpenPE, onOpenCase, onRegisterReference }) {
+function OrdersList({ role, ordersData, filtersOpen, setFiltersOpen, filterResetKey, onOpenPE, onOpenCase, onRegisterReference }) {
   return (
     <section className="content">
       <div className="section-head">
@@ -3198,7 +3204,7 @@ function OrdersList({ role, ordersData, filtersOpen, setFiltersOpen, onOpenPE, o
         </div>
       </div>
       {filtersOpen && (
-        <FilterGrid filters={orderFilters} />
+        <FilterGrid key={`order-filters-${filterResetKey}`} filters={orderFilters} />
       )}
       <DataTable
         columns={['SE', 'Caso', 'Cliente', 'Proforma', 'Estado solicitud', 'Referencia externa', 'Orden de compra', 'Fecha estimada', 'Disponibilidad', 'Pendientes', '']}
@@ -3207,7 +3213,7 @@ function OrdersList({ role, ordersData, filtersOpen, setFiltersOpen, onOpenPE, o
           item.caseId,
           item.client,
           item.proforma,
-          <Pill key="state" tone="blue">{item.state}</Pill>,
+          <Pill key="state" tone={orderStateTone(item.state)}>{displayOrderState(item.state)}</Pill>,
           item.jde,
           item.oc,
           item.eta,
@@ -3231,7 +3237,7 @@ function PEWorkspace({ role, currentPE, peLinesData, tab, setTab, onModal, onOpe
   const hasOc = hasPEOC(currentPE)
   const hasSelectedLines = selectedOpenPELines(normalizedLines).length > 0
   const canRegisterOC = (role === 'Compras' || role === 'Administrador funcional') && !peComplete && currentPE.state === 'Referenciada externamente' && !hasOc
-  const canAssignDate = (role === 'Compras' || role === 'Administrador funcional') && !peComplete && hasSelectedLines
+  const canAssignDate = (role === 'Compras' || role === 'Logística' || role === 'Administrador funcional') && !peComplete && hasSelectedLines
   const canShowConfirmPhysical = canManagePEReceipt(role) && !peComplete && hasSelectedLines
   const canConfirmPhysical = canShowConfirmPhysical && selectedPELinesReadyForReceipt(normalizedLines)
   const confirmPhysicalTitle = canConfirmPhysical ? 'Confirmar disponibilidad fisica' : 'Seleccione filas y capture Recibida > 0'
@@ -3291,6 +3297,7 @@ function PELinesTab({ role, currentPE, peLinesData, onToggleLine, onToggleAllLin
   const canEditReceived = canUseSelection && !readOnly
   const canEditLineOC = (role === 'Compras' || role === 'Administrador funcional' || role === 'Inventario') && !readOnly
   const canEditWorkshopRequired = (role === 'Inventario' || role === 'Administrador funcional') && !readOnly
+  const canEditLineNote = (role === 'Compras' || role === 'Logística' || role === 'Cierre administrativo' || role === 'Administrador funcional') && !readOnly
   const selectionHeader = (
     <label className="table-check" title="Seleccionar pendientes">
       <input
@@ -3329,7 +3336,6 @@ function PELinesTab({ role, currentPE, peLinesData, onToggleLine, onToggleAllLin
               className={`table-input number-input ${hasInvalidReceiptCapture(line) ? 'input-warning' : ''}`}
               type="number"
               min={numericValue(line.received) + 1}
-              max={line.requested}
               value={line.receivedDraft ?? line.received}
               disabled={!canEditReceived || !line.selected}
               onChange={(event) => onUpdateLine(index, 'received', event.target.value)}
@@ -3357,7 +3363,13 @@ function PELinesTab({ role, currentPE, peLinesData, onToggleLine, onToggleAllLin
               <option>No</option>
             </select>,
             line.user,
-            line.note,
+            <input
+              key="note"
+              className="table-input"
+              value={line.note || ''}
+              disabled={!canEditLineNote}
+              onChange={(event) => onUpdateLine(index, 'note', event.target.value)}
+            />,
           ],
         }))}
       />
@@ -3515,6 +3527,32 @@ function DataTable({ columns, rows }) {
   )
 }
 
+function displayCaseState(state) {
+  if (state === 'Solicitud en seguimiento') return 'En seguimiento'
+  if (state === 'Disponibilidad parcial') return 'Seguimiento solicitud'
+  return state
+}
+
+function caseStateTone(state) {
+  if (state === 'Solicitud en seguimiento') return 'orange'
+  if (state === 'Disponibilidad completa') return 'blue'
+  if (state === 'Compromiso pendiente') return 'red'
+  return 'blue'
+}
+
+function displayOrderState(state) {
+  if (state === 'Referenciada externamente') return 'Seguimiento solicitud'
+  if (state === 'En camino') return 'Solicitud en seguimiento'
+  return state
+}
+
+function orderStateTone(state) {
+  if (state === 'Referenciada externamente') return 'green'
+  if (state === 'Recibida parcial') return 'gray'
+  if (state === 'Recibida completa') return 'orange'
+  return 'blue'
+}
+
 function Metric({ label, value, icon: Icon, compact = false }) {
   return (
     <article className={`metric ${compact ? 'compact' : ''}`}>
@@ -3564,12 +3602,12 @@ function Modal({ name, role, currentCase, currentProforma, currentPE, peLinesDat
     email: '',
     vehicle: '',
     plate: '',
-    insurer: 'INISER',
+    insurer: 'Autorización cargada',
     ot: '',
     proforma: '',
     jde: currentPE?.jde && currentPE.jde !== 'Sin referencia' ? currentPE.jde : '',
     oc: currentPE?.oc && currentPE.oc !== '-' ? currentPE.oc : '',
-    newDate: '',
+    newDate: name === 'Cambiar fecha' ? '2026-06-20' : '',
     reason: dateChangeReasons[0] || 'Proveedor',
     comment: '',
     receivedMode: 'Parcial',
@@ -3746,12 +3784,7 @@ function getModalBody(name, role, formValues, setFormValues, currentPE, currentC
     )
   }
   if (name === 'Cerrar caso') {
-    return (
-      <div className="notice">
-        <AlertTriangle size={16} />
-        Confirme el cierre solo si la disponibilidad del caso esta al 100% y no quedan gestiones operativas pendientes.
-      </div>
-    )
+    return <ModalFields fields={['Caso', 'Estado actual', 'Responsable', 'Comentario']} notice="Procesar actualizara el caso." />
   }
   return <ModalFields fields={['Caso / SE', 'Responsable', 'Fecha/hora', 'Comentario', `Rol activo: ${role}`]} />
 }
@@ -4057,6 +4090,13 @@ function ReceptionFields({ values, setValues, currentPE, currentCase, peLinesDat
         <label>
           <span>Lineas seleccionadas</span>
           <input readOnly value={selectedLines.length} />
+        </label>
+        <label>
+          <span>Tipo de recepción</span>
+          <select value={values.receivedMode} onChange={(event) => updateValue(setValues, 'receivedMode', event.target.value)}>
+            <option>Parcial</option>
+            <option>Completa</option>
+          </select>
         </label>
         <label>
           <span>Observacion</span>
