@@ -35,77 +35,81 @@ import {
 import './App.css'
 
 const roles = [
-  'Responsable del caso',
-  'Bodega de Enderezado',
-  'Jefe de Enderezado',
+  'Responsable de atención',
+  'Área técnica / Presupuestador',
+  'Inventario',
+  'Jefatura técnica',
   'Compras',
-  'Facturacion',
-  'Administrador',
+  'Logística',
+  'Cierre administrativo',
+  'Administrador funcional',
 ]
 
 const initialUsersCatalog = [
-  { id: 'USR-001', name: 'Ana Gomez', initials: 'AG', role: 'Responsable del caso', area: 'Responsable del caso', active: true, primary: true },
-  { id: 'USR-002', name: 'Sofia Herrera', initials: 'SH', role: 'Responsable del caso', area: 'Responsable del caso', active: true, primary: false },
-  { id: 'USR-003', name: 'Bruno Medina', initials: 'BM', role: 'Bodega de Enderezado', area: 'Bodega de Enderezado', active: true, primary: true },
-  { id: 'USR-004', name: 'Carlos Ruiz', initials: 'CR', role: 'Jefe de Enderezado', area: 'Jefatura de Enderezado', active: true, primary: true },
-  { id: 'USR-005', name: 'Lucia Morales', initials: 'LM', role: 'Compras', area: 'Compras', active: true, primary: true },
-  { id: 'USR-006', name: 'Valeria Flores', initials: 'VF', role: 'Facturacion', area: 'Facturacion', active: true, primary: true },
-  { id: 'USR-007', name: 'Mario Sandoval', initials: 'MS', role: 'Administrador', area: 'Administracion NARA', active: true, primary: true },
+  { id: 'USR-001', name: 'Atención NARA 01', initials: 'A1', role: 'Responsable de atención', area: 'Responsable de atención', active: true, primary: true },
+  { id: 'USR-002', name: 'Atención NARA 02', initials: 'A2', role: 'Responsable de atención', area: 'Responsable de atención', active: true, primary: false },
+  { id: 'USR-003', name: 'Técnica NARA 01', initials: 'T1', role: 'Área técnica / Presupuestador', area: 'Área técnica / Presupuestador', active: true, primary: true },
+  { id: 'USR-004', name: 'Inventario NARA 01', initials: 'I1', role: 'Inventario', area: 'Inventario', active: true, primary: true },
+  { id: 'USR-005', name: 'Jefatura NARA 01', initials: 'J1', role: 'Jefatura técnica', area: 'Jefatura técnica', active: true, primary: true },
+  { id: 'USR-006', name: 'Compras NARA 01', initials: 'C1', role: 'Compras', area: 'Compras', active: true, primary: true },
+  { id: 'USR-007', name: 'Logística NARA 01', initials: 'L1', role: 'Logística', area: 'Logística', active: true, primary: true },
+  { id: 'USR-008', name: 'Cierre NARA 01', initials: 'CA', role: 'Cierre administrativo', area: 'Cierre administrativo', active: true, primary: true },
+  { id: 'USR-009', name: 'Admin NARA', initials: 'AN', role: 'Administrador funcional', area: 'Administración NARA', active: true, primary: true },
 ]
 
 const initialReasonCatalogs = {
   dateChangeReasons: [
-    { id: 'MOT-FECHA-001', label: 'Proveedor', active: true },
-    { id: 'MOT-FECHA-002', label: 'Puerto', active: true },
-    { id: 'MOT-FECHA-003', label: 'Aduana', active: true },
-    { id: 'MOT-FECHA-004', label: 'Almacen', active: true },
-    { id: 'MOT-FECHA-005', label: 'CPD', active: true },
-    { id: 'MOT-FECHA-006', label: 'Fecha JDE actualizada', active: true },
-    { id: 'MOT-FECHA-007', label: 'Otro', active: true },
+    { id: 'MOI-FECHA-001', label: 'Proveedor', active: true },
+    { id: 'MOI-FECHA-002', label: 'Puerto', active: true },
+    { id: 'MOI-FECHA-003', label: 'Aduana', active: true },
+    { id: 'MOI-FECHA-004', label: 'Almacen', active: true },
+    { id: 'MOI-FECHA-005', label: 'CPD', active: true },
+    { id: 'MOI-FECHA-006', label: 'Fecha externa actualizada', active: true },
+    { id: 'MOI-FECHA-007', label: 'Otro', active: true },
   ],
 }
 
 const caseStates = [
-  'Caso registrado',
-  'Expediente pendiente de completar',
+  'Registrado',
+  'Expediente pendiente',
   'Expediente completo',
-  'En validación de disponibilidad',
+  'En validación',
   'Repuestos disponibles',
   'Repuestos pendientes',
-  'Pedido especial requerido',
-  'Pedido especial en seguimiento',
-  'Disponibilidad parcial actualizada',
-  'Disponibilidad completa para el caso',
-  'Presupuesto adicional por daño oculto',
-  'Finiquito abierto',
+  'Solicitud especial requerida',
+  'Solicitud en seguimiento',
+  'Disponibilidad parcial',
+  'Disponibilidad completa',
+  'Proforma adicional',
+  'Compromiso pendiente',
   'Listo para cierre',
   'Cerrado',
 ]
 
-const expedienteRestrictedStates = ['Expediente pendiente de completar', 'Expediente completo']
+const expedienteRestrictedStates = ['Expediente pendiente', 'Expediente completo']
 
 const baseDocumentMeta = {
-  ot: { title: 'OT', required: true },
+  ot: { title: 'Orden interna', required: true },
   proforma: { title: 'Presupuesto / Proforma', required: true },
-  ocSeguro: { title: 'OC del seguro', required: true },
+  ocSeguro: { title: 'autorización administrativa', required: true },
 }
 
 const postAvailabilityStates = [
   'Repuestos disponibles',
   'Repuestos pendientes',
-  'Pedido especial requerido',
-  'Pedido especial en seguimiento',
-  'Disponibilidad parcial actualizada',
-  'Disponibilidad completa para el caso',
-  'Presupuesto adicional por daño oculto',
-  'Finiquito abierto',
+  'Solicitud especial requerida',
+  'Solicitud en seguimiento',
+  'Disponibilidad parcial',
+  'Disponibilidad completa',
+  'Proforma adicional',
+  'Compromiso pendiente',
   'Listo para cierre',
 ]
 
 const initialProformaActionHiddenStates = [
-  'Expediente pendiente de completar',
+  'Expediente pendiente',
   'Expediente completo',
-  'En validación de disponibilidad',
+  'En validación',
 ]
 
 function isAllowedCaseState(state) {
@@ -158,8 +162,8 @@ function recalculateProforma(proforma) {
 
 function canEditProformaDetail(role, currentCase, proforma) {
   if (!proforma || proforma.excelState !== 'Valido') return false
-  return (role === 'Administrador' || role === 'Bodega de Enderezado')
-    && currentCase.state === 'En validación de disponibilidad'
+  return (role === 'Administrador funcional' || role === 'Inventario')
+    && currentCase.state === 'En validación'
     && !proforma.availabilityConfirmed
 }
 
@@ -167,16 +171,16 @@ function canClearProformaDetail(role, currentCase, proforma) {
   return Boolean(proforma?.lines?.length) && proforma.availabilityConfirmed === false && canEditProformaDetail(role, currentCase, proforma)
 }
 
-function canRegisterJdeForPE(role, pe) {
-  return (role === 'Bodega de Enderezado' || role === 'Administrador') && pe?.state === 'Generado'
+function canRegisterReferenceForPE(role, pe) {
+  return (role === 'Inventario' || role === 'Administrador funcional') && pe?.state === 'Generada'
 }
 
 function isPEComplete(pe) {
-  return pe?.state === 'PE recibido completo'
+  return pe?.state === 'Recibida completa'
 }
 
 function hasPEOC(pe) {
-  return Boolean(pe?.oc && pe.oc !== '-' && pe.oc !== 'Sin OC')
+  return Boolean(pe?.oc && pe.oc !== '-' && pe.oc !== 'Sin orden')
 }
 
 function normalizePELine(line) {
@@ -246,7 +250,7 @@ function selectedPELinesReadyForReceipt(linesList) {
 }
 
 function canManagePEReceipt(role) {
-  return role === 'Compras' || role === 'Administrador' || role === 'Bodega de Enderezado'
+  return role === 'Compras' || role === 'Logística' || role === 'Administrador funcional' || role === 'Inventario'
 }
 
 function hasInvalidReceiptCapture(line) {
@@ -338,8 +342,8 @@ function unselectedMissingLinesForProforma(proforma) {
 }
 
 function shouldShowPEProcessFields(role, currentCase, proforma) {
-  if (role === 'Bodega de Enderezado') return false
-  if (!proforma || currentCase.state === 'En validación de disponibilidad') return false
+  if (role === 'Inventario') return false
+  if (!proforma || currentCase.state === 'En validación') return false
   return Boolean(proforma.peSelectionEnabled || proforma.peGenerated || proforma.peId || proforma.peCount > 0)
 }
 
@@ -399,9 +403,9 @@ function uploadedDocument(title, reference, referencePlaceholder, description, f
 
 function documentPack({ ot, proforma, ocSeguro, otStatus = 'Cargado', proformaStatus = 'Valido', ocSeguroStatus = 'Cargado', additional = [], supplementalSets = [], futureGroups = [] }) {
   return {
-    ot: ot ? demoDocument('OT', ot, 'Orden de taller asociada al caso', otStatus) : pendingDocument('OT', 'Sin referencia', 'Orden de taller pendiente'),
+    ot: ot ? demoDocument('Orden interna', ot, 'Orden interna asociada al caso', otStatus) : pendingDocument('Orden interna', 'Sin referencia', 'Orden interna pendiente'),
     proforma: proforma ? demoDocument('Presupuesto / Proforma', proforma, 'Presupuesto base cargado por el responsable', proformaStatus) : pendingDocument('Presupuesto / Proforma', 'Sin referencia', 'Presupuesto pendiente'),
-    ocSeguro: ocSeguro ? demoDocument('OC del seguro', ocSeguro, 'Orden de compra del seguro asociada al expediente', ocSeguroStatus) : pendingDocument('OC del seguro', 'Sin referencia', 'OC del seguro pendiente'),
+    ocSeguro: ocSeguro ? demoDocument('autorización administrativa', ocSeguro, 'Autorización administrativa asociada al expediente', ocSeguroStatus) : pendingDocument('autorización administrativa', 'Sin referencia', 'autorización administrativa pendiente'),
     additional: additional.map((document, index) => ({ id: document.id || `AD-DEMO-${index + 1}`, ...document })),
     supplementalSets,
     futureGroups,
@@ -424,7 +428,7 @@ function initialProformaRecord(id, caseId, type = 'Inicial') {
 }
 
 function uniqueProformaId(preferredId, proformasList) {
-  const baseId = preferredId || `PF-${String(proformasList.length + 1).padStart(3, '0')}`
+  const baseId = preferredId || `PR-${String(proformasList.length + 1).padStart(3, '0')}`
   if (!proformasList.some((item) => item.id === baseId)) return baseId
   let suffix = 2
   let nextId = `${baseId}-${suffix}`
@@ -437,9 +441,9 @@ function uniqueProformaId(preferredId, proformasList) {
 
 function initialCaseDocuments({ ot, proforma, clientAssumes = false }) {
   return {
-    ot: pendingDocument('OT', ot || 'Sin referencia', 'Orden de taller pendiente'),
+    ot: pendingDocument('Orden interna', ot || 'Sin referencia', 'Orden interna pendiente'),
     proforma: pendingDocument('Presupuesto / Proforma', proforma || 'Sin referencia', 'Presupuesto pendiente'),
-    ...(clientAssumes ? {} : { ocSeguro: pendingDocument('OC del seguro', 'Sin referencia', 'OC del seguro pendiente') }),
+    ...(clientAssumes ? {} : { ocSeguro: pendingDocument('autorización administrativa', 'Sin referencia', 'autorización administrativa pendiente') }),
     additional: [],
     supplementalSets: [],
     futureGroups: [],
@@ -448,227 +452,243 @@ function initialCaseDocuments({ ot, proforma, clientAssumes = false }) {
 
 const cases = [
   {
-    id: 'CP-000123',
-    client: 'Juan Perez',
-    vehicle: 'Toyota Hilux 2022',
-    plate: 'M123456',
-    owner: 'Ana Gomez',
-    registeredBy: 'Ana Gomez',
-    state: 'Pedido especial en seguimiento',
+    id: 'CS-2410-018',
+    client: 'Cliente operativo 01',
+    vehicle: 'Unidad SUV 2024',
+    plate: 'U-4821',
+    owner: 'Atención NARA 01',
+    registeredBy: 'Atención NARA 01',
+    state: 'Solicitud en seguimiento',
     availability: 72,
     openPE: 1,
-    finiquito: 'Si',
-    nextAction: 'Compras confirma recepcion',
-    updated: '18/06/2026 10:35',
+    finiquito: 'No',
+    nextAction: 'Logística monitorea recepción parcial',
+    updated: '18/07/2026 10:35',
     documents: documentPack({
-      ot: 'OT-10245',
-      proforma: 'PF-001',
-      ocSeguro: 'OCS-3441',
+      ot: 'OI-2410-018',
+      proforma: 'PR-2410-77',
+      ocSeguro: 'AUT-2410-018',
       ocSeguroStatus: 'Requiere correccion',
-      additional: [demoDocument('Cedula del cliente', 'ID-7781', 'Identificacion anexada al expediente')],
+      additional: [demoDocument('Autorización del cliente', 'AUT-CLI-018', 'Soporte administrativo anexado al expediente')],
+    }),
+  },
+  {
+    id: 'CS-2410-019',
+    client: 'Cliente operativo 02',
+    vehicle: 'Unidad pickup 2023',
+    plate: 'U-5104',
+    owner: 'Atención NARA 02',
+    registeredBy: 'Atención NARA 02',
+    state: 'Disponibilidad completa',
+    availability: 100,
+    openPE: 0,
+    finiquito: 'No',
+    nextAction: 'Jefatura técnica define continuidad',
+    updated: '18/07/2026 09:10',
+    documents: documentPack({ ot: 'OI-2410-019', proforma: 'PR-2410-78', ocSeguro: 'AUT-2410-019' }),
+  },
+  {
+    id: 'CS-2410-020',
+    client: 'Cliente operativo 03',
+    vehicle: 'Unidad sedán 2022',
+    plate: 'U-3019',
+    owner: 'Atención NARA 01',
+    registeredBy: 'Atención NARA 01',
+    state: 'Solicitud especial requerida',
+    availability: 48,
+    openPE: 1,
+    finiquito: 'No',
+    nextAction: 'Inventario registra referencia externa',
+    updated: '17/07/2026 16:42',
+    documents: documentPack({ ot: 'OI-2410-020', proforma: 'PR-2410-79', ocSeguro: 'AUT-2410-020' }),
+  },
+  {
+    id: 'CS-2410-021',
+    client: 'Cliente operativo 04',
+    vehicle: 'Unidad van 2021',
+    plate: 'U-7440',
+    owner: 'Atención NARA 02',
+    registeredBy: 'Atención NARA 02',
+    state: 'Solicitud en seguimiento',
+    availability: 40,
+    openPE: 1,
+    finiquito: 'No',
+    nextAction: 'Compras actualiza fecha vencida',
+    updated: '18/07/2026 08:18',
+    documents: documentPack({ ot: 'OI-2410-021', proforma: 'PR-2410-80', ocSeguro: 'AUT-2410-021' }),
+  },
+  {
+    id: 'CS-2410-022',
+    client: 'Cliente operativo 05',
+    vehicle: 'Unidad compacta 2024',
+    plate: 'U-6207',
+    owner: 'Atención NARA 01',
+    registeredBy: 'Atención NARA 01',
+    state: 'Solicitud en seguimiento',
+    availability: 62,
+    openPE: 1,
+    finiquito: 'No',
+    nextAction: 'Logística confirma nueva fecha',
+    updated: '18/07/2026 11:05',
+    documents: documentPack({ ot: 'OI-2410-022', proforma: 'PR-2410-81', ocSeguro: 'AUT-2410-022' }),
+  },
+  {
+    id: 'CS-2410-023',
+    client: 'Cliente operativo 06',
+    vehicle: 'Unidad crossover 2024',
+    plate: 'U-7142',
+    owner: 'Atención NARA 01',
+    registeredBy: 'Atención NARA 01',
+    state: 'Proforma adicional',
+    availability: 45,
+    openPE: 1,
+    finiquito: 'No',
+    nextAction: 'Área técnica documenta daño oculto',
+    updated: '18/07/2026 12:25',
+    documents: documentPack({
+      ot: 'OI-2410-023',
+      proforma: 'PR-2410-82',
+      ocSeguro: 'AUT-2410-023',
       supplementalSets: [
         {
           id: 'set-damage-001',
           type: 'Daño oculto',
           reason: 'Daño oculto detectado en desmontaje',
           documents: {
-            ot: pendingDocument('OT adicional', 'Opcional', 'OT opcional para daño oculto'),
-            proforma: demoDocument('Proforma adicional', 'PF-002', 'Proforma por daño oculto', 'Pendiente'),
-            ocSeguro: pendingDocument('OC del seguro adicional', 'Pendiente', 'OC del seguro por daño oculto'),
+            ot: pendingDocument('Orden interna adicional', 'Opcional', 'Orden interna opcional para daño oculto'),
+            proforma: demoDocument('Proforma adicional', 'PR-2410-83', 'Proforma por daño oculto', 'Pendiente'),
+            ocSeguro: pendingDocument('autorización administrativa adicional', 'Pendiente', 'autorización administrativa por daño oculto'),
           },
         },
       ],
     }),
   },
   {
-    id: 'CP-000124',
-    client: 'Maria Lopez',
-    vehicle: 'Kia Sportage 2021',
-    plate: 'M778901',
-    owner: 'Sofia Herrera',
-    registeredBy: 'Sofia Herrera',
-    state: 'En validación de disponibilidad',
-    availability: 48,
-    openPE: 0,
-    finiquito: 'No',
-    nextAction: 'Bodega valida faltantes',
-    updated: '18/06/2026 09:10',
-    documents: documentPack({ ot: 'OT-10246', proforma: 'PF-010', ocSeguro: 'OCS-3452' }),
-  },
-  {
-    id: 'CP-000125',
-    client: 'Roberto Silva',
-    vehicle: 'Nissan Frontier 2020',
-    plate: 'M445120',
-    owner: 'Ana Gomez',
-    registeredBy: 'Ana Gomez',
-    state: 'Expediente pendiente de completar',
-    availability: 0,
-    openPE: 0,
-    finiquito: 'No',
-    nextAction: 'Cargar detalle de proforma',
-    updated: '17/06/2026 16:42',
-    documents: documentPack({}),
-  },
-  {
-    id: 'CP-000126',
-    client: 'Taller Central',
-    vehicle: 'Hyundai Tucson 2023',
-    plate: 'M552900',
-    owner: 'Sofia Herrera',
-    registeredBy: 'Sofia Herrera',
-    state: 'Expediente completo',
-    availability: 0,
-    openPE: 0,
-    finiquito: 'No',
-    nextAction: 'Enviar a Bodega',
-    updated: '18/06/2026 08:18',
-    documents: documentPack({ ot: 'OT-10247', proforma: 'PF-009', ocSeguro: 'OCS-3460' }),
-  },
-  {
-    id: 'CP-000127',
-    client: 'Diana Castro',
-    vehicle: 'Toyota Corolla Cross 2024',
-    plate: 'M990771',
-    owner: 'Ana Gomez',
-    registeredBy: 'Ana Gomez',
-    state: 'Expediente pendiente de completar',
-    availability: 0,
-    openPE: 0,
-    finiquito: 'No',
-    nextAction: 'Cargar OC del seguro',
-    updated: '18/06/2026 11:05',
-    documents: documentPack({ ot: 'OT-10248', proforma: 'PF-011', ocSeguro: null }),
-  },
-  {
-    id: 'CP-000128',
-    client: 'Ramon Mejia',
-    vehicle: 'Isuzu D-Max 2022',
-    plate: 'M773102',
-    owner: 'Ana Gomez',
-    registeredBy: 'Ana Gomez',
-    state: 'En validación de disponibilidad',
-    availability: 35,
-    openPE: 0,
-    finiquito: 'No',
-    nextAction: 'Bodega confirma disponibilidad',
-    updated: '18/06/2026 12:25',
-    documents: documentPack({ ot: 'OT-10249', proforma: 'PF-012', ocSeguro: 'OCS-3466' }),
-  },
-  {
-    id: 'CP-000129',
-    client: 'Carla Molina',
-    vehicle: 'Suzuki Vitara 2020',
-    plate: 'M661245',
-    owner: 'Sofia Herrera',
-    registeredBy: 'Sofia Herrera',
-    state: 'Finiquito abierto',
-    availability: 100,
+    id: 'CS-2410-024',
+    client: 'Cliente operativo 07',
+    vehicle: 'Unidad panel 2020',
+    plate: 'U-2086',
+    owner: 'Atención NARA 02',
+    registeredBy: 'Atención NARA 02',
+    state: 'Compromiso pendiente',
+    availability: 92,
     openPE: 1,
     finiquito: 'Si',
-    nextAction: 'Facturacion da seguimiento a finiquito',
-    updated: '17/06/2026 15:40',
+    nextAction: 'Cierre administrativo revisa compromiso',
+    updated: '17/07/2026 15:40',
     documents: documentPack({
-      ot: 'OT-10250',
-      proforma: 'PF-013',
-      ocSeguro: 'OCS-3470',
-      additional: [demoDocument('Finiquito', 'FIN-0008', 'Finiquito abierto asociado al caso')],
+      ot: 'OI-2410-024',
+      proforma: 'PR-2410-84',
+      ocSeguro: 'AUT-2410-024',
+      additional: [demoDocument('Compromiso pendiente', 'COM-2410-024', 'Compromiso documentado asociado al caso')],
     }),
   },
   {
-    id: 'CP-000130',
-    client: 'Luis Bermudez',
-    vehicle: 'Mitsubishi L200 2021',
-    plate: 'M335781',
-    owner: 'Ana Gomez',
-    registeredBy: 'Ana Gomez',
-    state: 'Disponibilidad parcial actualizada',
-    availability: 78,
-    openPE: 1,
-    finiquito: 'No',
-    nextAction: 'Compras confirma pendientes',
-    updated: '18/06/2026 13:12',
-    documents: documentPack({ ot: 'OT-10251', proforma: 'PF-014', ocSeguro: 'OCS-3475' }),
-  },
-  {
-    id: 'CP-000131',
-    client: 'Paola Duarte',
-    vehicle: 'Toyota RAV4 2024',
-    plate: 'M998002',
-    owner: 'Ana Gomez',
-    registeredBy: 'Ana Gomez',
-    state: 'Disponibilidad completa para el caso',
+    id: 'CS-2410-025',
+    client: 'Cliente operativo 08',
+    vehicle: 'Unidad utilitaria 2023',
+    plate: 'U-9305',
+    owner: 'Atención NARA 01',
+    registeredBy: 'Atención NARA 01',
+    state: 'Listo para cierre',
     availability: 100,
-    openPE: 1,
+    openPE: 0,
     finiquito: 'No',
-    nextAction: 'Validar cierre',
-    updated: '18/06/2026 14:03',
-    documents: documentPack({ ot: 'OT-10252', proforma: 'PF-015', ocSeguro: 'OCS-3480' }),
-  },
-  {
-    id: 'CP-000132',
-    client: 'Ricardo Aguilar',
-    vehicle: 'Kia Sorento 2022',
-    plate: 'M238712',
-    owner: 'Sofia Herrera',
-    registeredBy: 'Sofia Herrera',
-    state: 'Pedido especial en seguimiento',
-    availability: 62,
-    openPE: 1,
-    finiquito: 'No',
-    nextAction: 'Compras registra fecha estimada',
-    updated: '18/06/2026 14:52',
-    documents: documentPack({ ot: 'OT-10253', proforma: 'PF-016', ocSeguro: 'OCS-3488' }),
+    nextAction: 'Cierre administrativo valida condiciones',
+    updated: '18/07/2026 14:03',
+    documents: documentPack({ ot: 'OI-2410-025', proforma: 'PR-2410-85', ocSeguro: 'AUT-2410-025' }),
   },
 ]
 
 const lines = [
   {
     item: '001',
-    sku: 'FAR-001',
-    description: 'Faro delantero',
+    sku: 'REP-DEF-001',
+    description: 'Defensa frontal',
+    required: 1,
+    available: 1,
+    missing: 0,
+    state: 'Completo',
+    authorization: 'Autorizado',
+    decision: 'No aplica',
+    eligible: 'No aplica',
+    pe: '',
+    note: 'Disponible desde primera validación',
+  },
+  {
+    item: '002',
+    sku: 'REP-FAR-002',
+    description: 'Faro lateral',
+    required: 1,
+    available: 1,
+    missing: 0,
+    state: 'Completo',
+    authorization: 'Autorizado',
+    decision: 'No aplica',
+    eligible: 'No aplica',
+    pe: '',
+    note: 'Disponible en inventario',
+  },
+  {
+    item: '003',
+    sku: 'REP-SOP-003',
+    description: 'Soporte de fijación',
+    required: 1,
+    available: 1,
+    missing: 0,
+    state: 'Completo',
+    authorization: 'Autorizado',
+    decision: 'No aplica',
+    eligible: 'No aplica',
+    pe: '',
+    note: 'Reservado para instalación',
+  },
+  {
+    item: '004',
+    sku: 'REP-GRP-004',
+    description: 'Grapas internas',
+    required: 4,
+    available: 4,
+    missing: 0,
+    state: 'Completo',
+    authorization: 'Autorizado',
+    decision: 'No aplica',
+    eligible: 'No aplica',
+    pe: '',
+    note: 'Kit completo',
+  },
+  {
+    item: '005',
+    sku: 'REP-CUB-005',
+    description: 'Cubierta inferior',
     required: 2,
     available: 1,
     missing: 1,
     state: 'Parcial',
     authorization: 'Autorizado',
-    decision: 'No aplica',
+    decision: 'Aprobado operativo',
     eligible: 'Si',
-    pe: 'PE-00045',
-    note: 'Solicitar unidad faltante',
+    pe: 'SE-2410-031',
+    note: 'Pendiente una unidad',
   },
   {
-    item: '002',
-    sku: 'MOL-002',
-    description: 'Moldura lateral',
+    item: '006',
+    sku: 'REP-SEN-006',
+    description: 'Sensor auxiliar',
     required: 1,
     available: 0,
     missing: 1,
     state: 'Pendiente',
     authorization: 'No autorizado',
-    decision: 'Aprobado operativo',
+    decision: 'Aprobado por jefatura',
     eligible: 'Si',
-    pe: 'PE-00045',
-    note: 'Cliente requiere continuidad',
+    pe: 'SE-2410-031',
+    note: 'Seguimiento de compras',
   },
   {
-    item: '003',
-    sku: 'GRP-003',
-    description: 'Grapas internas',
-    required: 10,
-    available: 0,
-    missing: 10,
-    state: 'Pendiente',
-    authorization: 'No autorizado',
-    decision: 'Rechazado operativo',
-    eligible: 'No',
-    pe: '',
-    note: 'No bloquea cierre',
-  },
-  {
-    item: '004',
-    sku: 'BUM-004',
-    description: 'Base bumper',
+    item: '007',
+    sku: 'REP-ANC-007',
+    description: 'Anclaje especial',
     required: 1,
     available: 0,
     missing: 1,
@@ -677,204 +697,148 @@ const lines = [
     decision: 'Pendiente',
     eligible: 'No',
     pe: '',
-    note: 'Requiere decision del jefe',
+    note: 'No bloquea compromiso',
   },
 ]
 
+const completeLines = lines.map((line) => ({ ...line, available: line.required, missing: 0, state: 'Completo', eligible: 'No aplica', pe: '' }))
+const partialLines = lines.map((line, index) => index < 5 ? line : { ...line, available: 0, missing: line.required, state: 'Pendiente', pe: 'SE-2410-032' })
+
 const proformas = [
-  {
-    id: 'PF-001',
-    caseId: 'CP-000123',
-    type: 'Inicial',
-    excelState: 'Valido',
-    availability: 72,
-    peCount: 1,
-    decisions: 2,
-    lines,
-  },
-  {
-    id: 'PF-002',
-    caseId: 'CP-000123',
-    type: 'Daño oculto',
-    excelState: 'Pendiente',
-    availability: 0,
-    peCount: 0,
-    decisions: 0,
-    lines: [],
-  },
-  {
-    id: 'PF-010',
-    caseId: 'CP-000124',
-    type: 'Inicial',
-    excelState: 'Valido',
-    availability: 48,
-    peCount: 1,
-    decisions: 1,
-    lines,
-  },
-  {
-    id: 'PF-012',
-    caseId: 'CP-000128',
-    type: 'Inicial',
-    excelState: 'Valido',
-    availability: 35,
-    peCount: 0,
-    decisions: 1,
-    lines,
-  },
-  {
-    id: 'PF-013',
-    caseId: 'CP-000129',
-    type: 'Finiquito',
-    excelState: 'Valido',
-    availability: 100,
-    peCount: 1,
-    decisions: 0,
-    lines: lines.map((line) => ({ ...line, available: line.required, missing: 0, state: 'Completo' })),
-  },
-  {
-    id: 'PF-014',
-    caseId: 'CP-000130',
-    type: 'Inicial',
-    excelState: 'Valido',
-    availability: 78,
-    peCount: 1,
-    decisions: 1,
-    lines,
-  },
-  {
-    id: 'PF-015',
-    caseId: 'CP-000131',
-    type: 'Inicial',
-    excelState: 'Valido',
-    availability: 100,
-    peCount: 1,
-    decisions: 0,
-    lines: lines.map((line) => ({ ...line, available: line.required, missing: 0, state: 'Completo', eligible: 'No aplica' })),
-  },
-  {
-    id: 'PF-016',
-    caseId: 'CP-000132',
-    type: 'Inicial',
-    excelState: 'Valido',
-    availability: 62,
-    peCount: 1,
-    decisions: 1,
-    lines,
-  },
+  { id: 'PR-2410-77', caseId: 'CS-2410-018', type: 'Inicial', excelState: 'Valido', availability: 72, peCount: 1, decisions: 2, lines },
+  { id: 'PR-2410-78', caseId: 'CS-2410-019', type: 'Inicial', excelState: 'Valido', availability: 100, peCount: 0, decisions: 0, lines: completeLines },
+  { id: 'PR-2410-79', caseId: 'CS-2410-020', type: 'Inicial', excelState: 'Valido', availability: 48, peCount: 1, decisions: 1, lines: partialLines },
+  { id: 'PR-2410-80', caseId: 'CS-2410-021', type: 'Inicial', excelState: 'Valido', availability: 40, peCount: 1, decisions: 1, lines: partialLines },
+  { id: 'PR-2410-81', caseId: 'CS-2410-022', type: 'Inicial', excelState: 'Valido', availability: 62, peCount: 1, decisions: 1, lines },
+  { id: 'PR-2410-82', caseId: 'CS-2410-023', type: 'Inicial', excelState: 'Valido', availability: 45, peCount: 1, decisions: 1, lines },
+  { id: 'PR-2410-83', caseId: 'CS-2410-023', type: 'Daño oculto', excelState: 'Pendiente', availability: 0, peCount: 0, decisions: 0, lines: [] },
+  { id: 'PR-2410-84', caseId: 'CS-2410-024', type: 'Inicial', excelState: 'Valido', availability: 92, peCount: 1, decisions: 0, lines: partialLines },
+  { id: 'PR-2410-85', caseId: 'CS-2410-025', type: 'Inicial', excelState: 'Valido', availability: 100, peCount: 0, decisions: 0, lines: completeLines },
 ]
 
 const specialOrders = [
   {
-    id: 'PE-00045',
-    caseId: 'CP-000123',
-    client: 'Juan Perez',
-    proforma: 'PF-001',
-    state: 'PE en camino',
-    jde: '98765',
-    oc: 'OC-4455',
-    eta: '20/09/2026',
-    alert: '30 dias',
+    id: 'SE-2410-031',
+    caseId: 'CS-2410-018',
+    client: 'Cliente operativo 01',
+    proforma: 'PR-2410-77',
+    state: 'Recibida parcial',
+    jde: 'EXT-88031',
+    oc: 'OC-2410-031',
+    eta: '02/08/2026',
+    alert: 'Recepción parcial',
     availability: 50,
     pendingLines: 2,
-    nextAction: 'Confirmar disponibilidad fisica',
+    nextAction: 'Logística da seguimiento a pendientes',
   },
   {
-    id: 'PE-00046',
-    caseId: 'CP-000124',
-    client: 'Maria Lopez',
-    proforma: 'PF-010',
-    state: 'Generado',
-    jde: 'Sin JDE',
+    id: 'SE-2410-032',
+    caseId: 'CS-2410-020',
+    client: 'Cliente operativo 03',
+    proforma: 'PR-2410-79',
+    state: 'Generada',
+    jde: 'Sin referencia',
     oc: '-',
     eta: 'Sin fecha',
     alert: 'Sin fecha estimada',
     availability: 0,
-    pendingLines: 4,
-    nextAction: 'Registrar JDE',
+    pendingLines: 3,
+    nextAction: 'Inventario registra referencia',
   },
   {
-    id: 'PE-00047',
-    caseId: 'CP-000126',
-    client: 'Taller Central',
-    proforma: 'PF-009',
-    state: 'PE recibido parcial',
-    jde: '99120',
-    oc: 'OC-4490',
-    eta: '04/06/2026',
+    id: 'SE-2410-033',
+    caseId: 'CS-2410-021',
+    client: 'Cliente operativo 04',
+    proforma: 'PR-2410-80',
+    state: 'En camino',
+    jde: 'EXT-88033',
+    oc: 'OC-2410-033',
+    eta: '10/06/2026',
     alert: 'Vencida',
-    availability: 75,
-    pendingLines: 1,
-    nextAction: 'Confirmar disponibilidad fisica',
-  },
-  {
-    id: 'PE-00048',
-    caseId: 'CP-000129',
-    client: 'Carla Molina',
-    proforma: 'PF-013',
-    state: 'PE recibido completo',
-    jde: '99201',
-    oc: 'OC-4502',
-    eta: '12/06/2026',
-    alert: 'Completado',
-    availability: 100,
-    pendingLines: 0,
-    nextAction: 'Facturacion da seguimiento a finiquito',
-  },
-  {
-    id: 'PE-00049',
-    caseId: 'CP-000131',
-    client: 'Paola Duarte',
-    proforma: 'PF-015',
-    state: 'PE recibido completo',
-    jde: '99245',
-    oc: 'OC-4510',
-    eta: '18/06/2026',
-    alert: 'Completado',
-    availability: 100,
-    pendingLines: 0,
-    nextAction: 'Validar cierre del caso',
-  },
-  {
-    id: 'PE-00050',
-    caseId: 'CP-000132',
-    client: 'Ricardo Aguilar',
-    proforma: 'PF-016',
-    state: 'PE solicitado en JDE',
-    jde: '99310',
-    oc: 'OC-4522',
-    eta: 'Sin fecha',
-    alert: 'Sin fecha estimada',
     availability: 25,
     pendingLines: 3,
+    nextAction: 'Compras actualiza fecha estimada',
+  },
+  {
+    id: 'SE-2410-034',
+    caseId: 'CS-2410-022',
+    client: 'Cliente operativo 05',
+    proforma: 'PR-2410-81',
+    state: 'En camino',
+    jde: 'EXT-88034',
+    oc: 'OC-2410-034',
+    eta: '02/08/2026',
+    alert: 'Cambio de fecha',
+    availability: 40,
+    pendingLines: 2,
+    nextAction: 'Logística valida tránsito',
+  },
+  {
+    id: 'SE-2410-035',
+    caseId: 'CS-2410-023',
+    client: 'Cliente operativo 06',
+    proforma: 'PR-2410-82',
+    state: 'Referenciada externamente',
+    jde: 'EXT-88035',
+    oc: 'OC-2410-035',
+    eta: 'Sin fecha',
+    alert: 'Sin fecha estimada',
+    availability: 20,
+    pendingLines: 3,
     nextAction: 'Compras registra fecha estimada',
+  },
+  {
+    id: 'SE-2410-036',
+    caseId: 'CS-2410-024',
+    client: 'Cliente operativo 07',
+    proforma: 'PR-2410-84',
+    state: 'Recibida completa',
+    jde: 'EXT-88036',
+    oc: 'OC-2410-036',
+    eta: '12/07/2026',
+    alert: 'Completado',
+    availability: 100,
+    pendingLines: 0,
+    nextAction: 'Cierre administrativo revisa compromiso',
   },
 ]
 
 const peLines = [
   {
-    line: '001',
-    sku: 'FAR-001',
-    description: 'Faro delantero',
+    line: '005',
+    sku: 'REP-CUB-005',
+    description: 'Cubierta inferior',
+    requested: 1,
+    received: 1,
+    pending: 0,
+    state: 'Completo',
+    receivedDate: '18/07/2026',
+    user: 'Logística',
+    note: 'Recibida y reservada',
+  },
+  {
+    line: '006',
+    sku: 'REP-SEN-006',
+    description: 'Sensor auxiliar',
     requested: 1,
     received: 0,
     pending: 1,
     state: 'Pendiente',
     receivedDate: '-',
     user: 'Compras',
-    note: 'En transito',
+    note: 'En tránsito',
   },
   {
-    line: '002',
-    sku: 'MOL-002',
-    description: 'Moldura lateral',
+    line: '007',
+    sku: 'REP-ANC-007',
+    description: 'Anclaje especial',
     requested: 1,
-    received: 1,
-    pending: 0,
-    state: 'Completo',
-    receivedDate: '18/06/2026',
+    received: 0,
+    pending: 1,
+    state: 'Pendiente',
+    receivedDate: '-',
     user: 'Compras',
-    note: 'Disponible en CPD',
+    note: 'Pendiente de proveedor',
   },
 ]
 
@@ -886,24 +850,24 @@ function nowMs() {
 
 const initialBitacoraEvents = [
   {
-    scope: 'PE',
-    entityId: 'PE-00045',
-    row: ['18/06/2026 10:15', 'Recepcion parcial registrada', '0', '1', 'Compras', 'CPD', 'Recepcion parcial registrada'],
+    scope: 'SE',
+    entityId: 'SE-2410-031',
+    row: ['18/07/2026 10:15', 'Recepcion parcial registrada', '0', '1', 'Logística', 'Recepcion parcial', 'Recepcion parcial registrada'],
   },
   {
-    scope: 'PE',
-    entityId: 'PE-00045',
-    row: ['17/06/2026 14:20', 'OC JDE', '-', 'OC-4455', 'Compras', 'Fecha JDE actualizada', 'Referencia confirmada'],
+    scope: 'SE',
+    entityId: 'SE-2410-031',
+    row: ['17/07/2026 14:20', 'Cambio de fecha', '20/07/2026', '02/08/2026', 'Compras', 'Retraso logístico', 'Referencia externa confirmada'],
   },
   {
-    scope: 'PE',
-    entityId: 'PE-00045',
-    row: ['16/06/2026 11:40', 'Fecha inicial', '-', '20/09/2026', 'Compras', 'Proveedor', 'Fecha estimada inicial'],
+    scope: 'SE',
+    entityId: 'SE-2410-031',
+    row: ['16/07/2026 11:40', 'Fecha inicial', '-', '20/07/2026', 'Compras', 'Proveedor', 'Fecha estimada inicial'],
   },
   {
     scope: 'Caso',
-    entityId: 'CP-000123',
-    row: ['18/06/2026 10:15', 'Disponibilidad caso', '65%', '72%', 'Compras', 'Recepcion de Pedido Especial', 'Caso con disponibilidad parcial actualizada'],
+    entityId: 'CS-2410-018',
+    row: ['18/07/2026 10:15', 'Disponibilidad caso', '65%', '72%', 'Logística', 'Recepcion de solicitud especial', 'Caso con disponibilidad parcial'],
   },
 ]
 
@@ -912,19 +876,21 @@ function isReceptionSnapshotActive(snapshot) {
 }
 
 const permissions = {
-  'Responsable del caso': ['Crear caso', 'Registrar comunicacion manual', 'Ver caso', 'Aprobar correo'],
-  'Bodega de Enderezado': [
+  'Responsable de atención': ['Crear caso', 'Registrar comunicacion manual', 'Ver caso', 'Aprobar correo'],
+  'Área técnica / Presupuestador': ['Crear caso', 'Cargar Excel', 'Modificar detalle', 'Registrar comunicacion manual', 'Ver caso'],
+  'Inventario': [
     'Cargar Excel',
     'Modificar detalle',
-    'Registrar JDE',
+    'Registrar referencia',
   ],
-  'Jefe de Enderezado': ['Crear caso', 'Registrar comunicacion manual', 'Validar cierre', 'Ver caso', 'Aprobar correo'],
-  Compras: ['Registrar JDE', 'Registrar OC JDE', 'Actualizar fecha', 'Confirmar disponibilidad fisica', 'Registrar cantidades recibidas', 'Sincronizacion completa'],
-  Facturacion: ['Aplicar finiquito', 'Cargar documento', 'Asociar PE/linea'],
-  Administrador: ['Todo'],
+  'Jefatura técnica': ['Crear caso', 'Registrar comunicacion manual', 'Validar cierre', 'Ver caso', 'Aprobar correo'],
+  Compras: ['Registrar referencia', 'Registrar orden de compra', 'Actualizar fecha', 'Confirmar disponibilidad fisica', 'Registrar cantidades recibidas', 'Sincronizacion completa'],
+  Logística: ['Actualizar fecha', 'Confirmar disponibilidad fisica', 'Registrar cantidades recibidas', 'Sincronizacion completa'],
+  'Cierre administrativo': ['Aplicar compromiso pendiente', 'Cargar documento', 'Asociar SE/linea'],
+  'Administrador funcional': ['Todo'],
 }
 
-const caseTabs = ['Expediente', 'Proformas', 'Pedidos Especiales']
+const caseTabs = ['Expediente', 'Proformas', 'Solicitudes especiales']
 const peTabs = ['Detalle']
 
 const caseFilters = [
@@ -932,11 +898,11 @@ const caseFilters = [
     label: 'Estado del caso',
     options: caseStates,
   },
-  { label: 'Responsable del caso', options: ['Ana Gomez', 'Sofia Herrera', 'Responsable sin asignar'] },
-  { label: 'Cliente', options: ['Juan Perez', 'Maria Lopez', 'Roberto Silva', 'Diana Castro', 'Ramon Mejia'] },
-  { label: 'Placa', options: ['M123456', 'M778901', 'M445120', 'M990771', 'M773102'] },
-  { label: 'OT', options: ['OT-10245', 'OT-10246', 'OT-10247', 'Sin OT'] },
-  { label: 'Proforma', options: ['PF-001', 'PF-002', 'PF-010', 'PF-014', 'Sin proforma valida'] },
+  { label: 'Responsable de atención', options: ['Atención NARA 01', 'Atención NARA 02', 'Responsable sin asignar'] },
+  { label: 'Cliente', options: ['Cliente operativo 01', 'Cliente operativo 02', 'Cliente operativo 03', 'Cliente operativo 04', 'Cliente operativo 05'] },
+  { label: 'Unidad', options: ['U-4821', 'U-5104', 'U-3019', 'U-7440', 'U-6207'] },
+  { label: 'Orden interna', options: ['OI-2410-018', 'OI-2410-019', 'OI-2410-020', 'Sin orden interna'] },
+  { label: 'Proforma', options: ['PR-2410-77', 'PR-2410-78', 'PR-2410-79', 'PR-2410-84', 'Sin proforma valida'] },
 ]
 
 function activeUsersByRole(usersCatalog, targetRole) {
@@ -944,9 +910,9 @@ function activeUsersByRole(usersCatalog, targetRole) {
 }
 
 function caseFiltersForUsers(usersCatalog) {
-  const responsibleUsers = activeUsersByRole(usersCatalog, 'Responsable del caso').map((user) => user.name)
+  const responsibleUsers = activeUsersByRole(usersCatalog, 'Responsable de atención').map((user) => user.name)
   return caseFilters.map((filter) => (
-    filter.label === 'Responsable del caso'
+    filter.label === 'Responsable de atención'
       ? { ...filter, options: responsibleUsers.length ? responsibleUsers : filter.options }
       : filter
   ))
@@ -959,26 +925,26 @@ function activeDateChangeReasons(reasonCatalogs) {
 
 const orderFilters = [
   {
-    label: 'Estado PE',
+    label: 'Estado solicitud',
     options: [
-      'Generado',
-      'PE solicitado en JDE',
-      'PE en seguimiento',
-      'PE en camino',
-      'PE recibido parcial',
-      'PE recibido completo',
-      'Sin JDE',
+      'Generada',
+      'Referenciada externamente',
+      'En seguimiento',
+      'En camino',
+      'Recibida parcial',
+      'Recibida completa',
+      'Sin referencia',
       'Sin fecha estimada',
       'Fecha vencida',
       'Pedido parcial',
       'Pedido completado',
     ],
   },
-  { label: 'Caso', options: ['CP-000123', 'CP-000124', 'CP-000126', 'CP-000129', 'CP-000132'] },
-  { label: 'Cliente', options: ['Juan Perez', 'Maria Lopez', 'Taller Central', 'Carla Molina', 'Ricardo Aguilar'] },
-  { label: 'Proforma', options: ['PF-001', 'PF-009', 'PF-010', 'PF-013', 'PF-016'] },
-  { label: 'Solicitud JDE', options: ['Sin JDE', '98765', '99120', '99201', '99310'] },
-  { label: 'OC JDE', options: ['Sin OC', 'OC-4455', 'OC-4490', 'OC-4502', 'OC-4522'] },
+  { label: 'Caso', options: ['CS-2410-018', 'CS-2410-020', 'CS-2410-021', 'CS-2410-022', 'CS-2410-024'] },
+  { label: 'Cliente', options: ['Cliente operativo 01', 'Cliente operativo 03', 'Cliente operativo 04', 'Cliente operativo 05', 'Cliente operativo 07'] },
+  { label: 'Proforma', options: ['PR-2410-77', 'PR-2410-79', 'PR-2410-80', 'PR-2410-81', 'PR-2410-84'] },
+  { label: 'Referencia externa', options: ['Sin referencia', 'EXT-88031', 'EXT-88033', 'EXT-88034', 'EXT-88036'] },
+  { label: 'Orden de compra', options: ['Sin orden', 'OC-2410-031', 'OC-2410-033', 'OC-2410-034', 'OC-2410-036'] },
   { label: 'Disponibilidad', options: ['0%', '25%', '50%', '75%', '100%'] },
 ]
 
@@ -1011,7 +977,7 @@ function isDocumentReady(document) {
   return ['Cargado', 'Valido'].includes(getDocumentStatus(document))
 }
 
-const placeholderReferences = new Set(['Sin referencia', 'Opcional', 'Pendiente', 'OT opcional'])
+const placeholderReferences = new Set(['Sin referencia', 'Opcional', 'Pendiente', 'Orden interna opcional'])
 
 function hasActualDocumentReference(document) {
   const reference = String(document?.reference || '').trim()
@@ -1037,10 +1003,10 @@ function hiddenDamageDocumentsReady(caseItem, proforma) {
 function hiddenDamageCanAdvanceInventory(caseItem, proforma) {
   if (!proforma || proforma.type !== 'Daño oculto') return true
   const set = supplementalSetForProforma(caseItem, proforma.id)
-  return Boolean(set?.sentToBodega && hiddenDamageDocumentsReady(caseItem, proforma))
+  return Boolean(set?.sentToInventario && hiddenDamageDocumentsReady(caseItem, proforma))
 }
 
-function hiddenDamageSetReadyForBodega(caseItem, set) {
+function hiddenDamageSetReadyForInventario(caseItem, set) {
   if (!set || set.type !== 'Daño oculto') return false
   const documents = set.documents || {}
   return isDocumentReady(documents.proforma) && (set.clientAssumes || isDocumentReady(documents.ocSeguro))
@@ -1052,7 +1018,7 @@ function hasActiveHiddenDamage(caseItem, proformasList = []) {
   const sets = normalizeDocuments(caseItem?.documents).supplementalSets.filter((set) => set.type === 'Daño oculto')
   return sets.some((set) => {
     const proforma = proformas.find((item) => item.caseId === caseItem.id && item.id === set.proformaId)
-    return !set.sentToBodega || !proforma?.availabilityConfirmed
+    return !set.sentToInventario || !proforma?.availabilityConfirmed
   })
 }
 
@@ -1067,15 +1033,15 @@ function otReferenceContextForExecution(caseItem) {
     const document = latestSet.documents?.ot
     return {
       document,
-      label: 'OT del daño oculto',
-      target: { scope: 'set', setId: latestSet.id, key: 'ot', title: document?.title || 'OT daño oculto' },
+      label: 'Orden interna del daño oculto',
+      target: { scope: 'set', setId: latestSet.id, key: 'ot', title: document?.title || 'Orden interna daño oculto' },
     }
   }
   const document = normalizeDocuments(caseItem?.documents).ot
   return {
     document,
-    label: 'OT',
-    target: { scope: 'base', key: 'ot', title: document?.title || 'OT' },
+    label: 'Orden interna',
+    target: { scope: 'base', key: 'ot', title: document?.title || 'Orden interna' },
   }
 }
 
@@ -1088,28 +1054,28 @@ function isExpedienteRestricted(caseItem) {
 }
 
 function canManageCaseDocuments(role, currentCase, activeUser) {
-  if (role === 'Administrador' || role === 'Jefe de Enderezado') return true
+  if (role === 'Administrador funcional' || role === 'Jefatura técnica') return true
   if (role === 'Compras') return true
-  return role === 'Responsable del caso' && (currentCase.registeredBy === activeUser.name || currentCase.owner === activeUser.name)
+  return role === 'Responsable de atención' && (currentCase.registeredBy === activeUser.name || currentCase.owner === activeUser.name)
 }
 
 function canAddHiddenDamageDocuments(role, currentCase, activeUser) {
-  const canUseHiddenDamage = role === 'Jefe de Enderezado' || role === 'Administrador'
+  const canUseHiddenDamage = role === 'Jefatura técnica' || role === 'Administrador funcional'
   return canUseHiddenDamage && canManageCaseDocuments(role, currentCase, activeUser) && currentCase.otExecutionApproved && isPostAvailabilityState(currentCase.state) && currentCase.state !== 'Cerrado'
 }
 
 function canAddFiniquitoDocument(role, currentCase, proformasList = []) {
   if (!currentCase) return false
   const hasAvailabilityWindow = numericValue(currentCase.availability) < 100 || hasActiveHiddenDamage(currentCase, proformasList)
-  return (role === 'Facturacion' || role === 'Administrador' || role === 'Compras') && currentCase.otExecutionApproved && currentCase.state !== 'Cerrado' && hasAvailabilityWindow
+  return (role === 'Cierre administrativo' || role === 'Administrador funcional' || role === 'Compras') && currentCase.otExecutionApproved && currentCase.state !== 'Cerrado' && hasAvailabilityWindow
 }
 
 function canAttemptCloseCase(role, currentCase, activeUser) {
   return Boolean(currentCase && currentCase.state !== 'Cerrado' && (
-    role === 'Administrador'
-    || role === 'Jefe de Enderezado'
+    role === 'Administrador funcional'
+    || role === 'Jefatura técnica'
     || role === 'Compras'
-    || (role === 'Responsable del caso' && (currentCase.registeredBy === activeUser.name || currentCase.owner === activeUser.name))
+    || (role === 'Responsable de atención' && (currentCase.registeredBy === activeUser.name || currentCase.owner === activeUser.name))
   ))
 }
 
@@ -1118,17 +1084,17 @@ function canCloseCase(role, currentCase, activeUser) {
   return canAttemptCloseCase(role, currentCase, activeUser)
     && currentCase.otExecutionApproved
     && numericValue(currentCase.availability) === 100
-    && currentCase.state === 'Disponibilidad completa para el caso'
+    && currentCase.state === 'Disponibilidad completa'
 }
 
 function canProceedOTAtCaseLevel(role, currentCase, ordersData, proformasList) {
-  if (!(role === 'Administrador' || role === 'Jefe de Enderezado')) return false
+  if (!(role === 'Administrador funcional' || role === 'Jefatura técnica')) return false
   if (!currentCase || currentCase.otExecutionApproved) return false
   if (!hasConfirmedValidProforma(currentCase.id, proformasList)) return false
-  const hasCasePE = ordersData.some((order) => order.caseId === currentCase.id)
-  return (currentCase.state === 'Disponibilidad completa para el caso' && currentCase.availability === 100)
-    || currentCase.state === 'Pedido especial requerido'
-    || hasCasePE
+  const hasCaseSE = ordersData.some((order) => order.caseId === currentCase.id)
+  return (currentCase.state === 'Disponibilidad completa' && currentCase.availability === 100)
+    || currentCase.state === 'Solicitud especial requerida'
+    || hasCaseSE
 }
 
 function hasJefeVisibleProforma(caseId, proformasList) {
@@ -1144,30 +1110,30 @@ function casePassedInitialInventoryValidation(caseItem, proformasList) {
 }
 
 function canSeeCase(caseItem, role, activeUser, proformasList) {
-  if (!isAllowedCaseState(caseItem.state)) return role === 'Administrador'
-  if (role === 'Administrador') return true
-  if (role === 'Jefe de Enderezado') return hasJefeVisibleProforma(caseItem.id, proformasList)
-  if (role === 'Responsable del caso') return caseItem.registeredBy === activeUser.name || caseItem.owner === activeUser.name
+  if (!isAllowedCaseState(caseItem.state)) return role === 'Administrador funcional'
+  if (role === 'Administrador funcional') return true
+  if (role === 'Jefatura técnica' || role === 'Área técnica / Presupuestador') return hasJefeVisibleProforma(caseItem.id, proformasList)
+  if (role === 'Responsable de atención') return caseItem.registeredBy === activeUser.name || caseItem.owner === activeUser.name
   if (isExpedienteRestricted(caseItem)) return false
-  if (role === 'Bodega de Enderezado') {
-    return ['En validación de disponibilidad', 'Pedido especial requerido', 'Pedido especial en seguimiento', 'Disponibilidad parcial actualizada', 'Disponibilidad completa para el caso'].includes(caseItem.state)
+  if (role === 'Inventario') {
+    return ['En validación', 'Solicitud especial requerida', 'Solicitud en seguimiento', 'Disponibilidad parcial', 'Disponibilidad completa'].includes(caseItem.state)
       || casePassedInitialInventoryValidation(caseItem, proformasList)
   }
-  if (role === 'Compras') {
-    return ['Pedido especial requerido', 'Pedido especial en seguimiento', 'Disponibilidad parcial actualizada', 'Disponibilidad completa para el caso', 'Finiquito abierto', 'Listo para cierre'].includes(caseItem.state)
+  if (role === 'Compras' || role === 'Logística') {
+    return ['Solicitud especial requerida', 'Solicitud en seguimiento', 'Disponibilidad parcial', 'Disponibilidad completa', 'Compromiso pendiente', 'Listo para cierre'].includes(caseItem.state)
   }
-  if (role === 'Facturacion') {
-    return caseItem.otExecutionApproved || caseHasFiniquito(caseItem) || caseItem.state === 'Finiquito abierto'
+  if (role === 'Cierre administrativo') {
+    return caseItem.otExecutionApproved || caseHasFiniquito(caseItem) || caseItem.state === 'Compromiso pendiente'
   }
   return true
 }
 
 function visibleCaseTabsFor(currentCase, ordersData, proformasList) {
-  if (currentCase.state === 'Expediente pendiente de completar') return ['Expediente']
+  if (currentCase.state === 'Expediente pendiente') return ['Expediente']
   const hasCaseOrders = ordersData.some((order) => order.caseId === currentCase.id)
   const hasValidProforma = hasConfirmedValidProforma(currentCase.id, proformasList)
   return caseTabs.filter((tab) => {
-    if (tab === 'Pedidos Especiales') return hasCaseOrders
+    if (tab === 'Solicitudes especiales') return hasCaseOrders
     if (!hasValidProforma && tab !== 'Expediente' && tab !== 'Proformas') return false
     return true
   })
@@ -1175,9 +1141,9 @@ function visibleCaseTabsFor(currentCase, ordersData, proformasList) {
 
 function normalizeDocuments(documents = {}) {
   return {
-    ot: documents.ot || pendingDocument('OT', 'Sin referencia', 'Orden de taller pendiente'),
+    ot: documents.ot || pendingDocument('Orden interna', 'Sin referencia', 'Orden interna pendiente'),
     proforma: documents.proforma || pendingDocument('Presupuesto / Proforma', 'Sin referencia', 'Presupuesto pendiente'),
-    ocSeguro: documents.ocSeguro || pendingDocument('OC del seguro', 'Sin referencia', 'OC del seguro pendiente'),
+    ocSeguro: documents.ocSeguro || pendingDocument('autorización administrativa', 'Sin referencia', 'autorización administrativa pendiente'),
     additional: documents.additional || [],
     supplementalSets: documents.supplementalSets || [],
     futureGroups: documents.futureGroups || [],
@@ -1241,10 +1207,10 @@ function App() {
   const [bitacoraData, setBitacoraData] = useState(initialBitacoraEvents)
   const [toast, setToast] = useState('')
   const [section, setSection] = useState('cases')
-  const [role, setRole] = useState('Bodega de Enderezado')
+  const [role, setRole] = useState('Inventario')
   const [selectedCase, setSelectedCase] = useState(null)
   const [selectedPE, setSelectedPE] = useState(null)
-  const [selectedProformaId, setSelectedProformaId] = useState('PF-001')
+  const [selectedProformaId, setSelectedProformaId] = useState('PR-2410-77')
   const [caseTab, setCaseTab] = useState('Expediente')
   const [peTab, setPeTab] = useState('Detalle')
   const [modal, setModal] = useState(null)
@@ -1262,16 +1228,16 @@ function App() {
   const currentPECase = casesData.find((item) => item.id === currentPE.caseId) || currentCase
   const currentCaseProformas = proformasData.filter((item) => item.caseId === currentCase.id)
   const currentJefeProformas = currentCaseProformas.filter(isConfirmedValidProforma)
-  const currentProforma = role === 'Jefe de Enderezado'
+  const currentProforma = (role === 'Jefatura técnica' || role === 'Área técnica / Presupuestador')
     ? currentJefeProformas.find((item) => item.id === selectedProformaId) || currentJefeProformas[0]
     : currentCaseProformas.find((item) => item.id === selectedProformaId) || currentCaseProformas[0]
 
   const pageTitle = useMemo(() => {
     if (section === 'cases' && !selectedCase) return 'Casos'
     if (section === 'cases') return `Caso ${currentCase.id}`
-    if (section === 'orders' && !selectedPE) return 'Pedidos Especiales'
+    if (section === 'orders' && !selectedPE) return 'Solicitudes especiales'
     if (section === 'orders') return currentPE.id
-    return 'Administracion'
+    return 'Administración'
   }, [currentCase.id, currentPE.id, section, selectedCase, selectedPE])
 
   function openCase(item = casesData[0]) {
@@ -1291,19 +1257,19 @@ function App() {
 
   function openPEBitacora(item) {
     setSelectedPE(item)
-    setDrawer('Bitacora del PE')
+    setDrawer('Bitacora de la solicitud')
   }
 
-  function openJDERegistration(item) {
+  function openReferenceRegistration(item) {
     setSelectedPE(item)
-    setModal('Registrar JDE / OC JDE')
+    setModal('Registrar referencia / orden')
   }
 
   function handleRoleChange(nextRole) {
     setRole(nextRole)
     setSelectedCase(null)
     setSelectedPE(null)
-    setSection(nextRole === 'Compras' ? 'orders' : 'cases')
+    setSection(nextRole === 'Compras' || nextRole === 'Logística' ? 'orders' : 'cases')
     setCaseTab('Expediente')
     setPeTab('Detalle')
   }
@@ -1339,7 +1305,7 @@ function App() {
   }
 
   function addPEBitacora(peId, event, previousValue, newValue, reason, comment) {
-    addBitacora('PE', peId, event, previousValue, newValue, reason, comment)
+    addBitacora('SE', peId, event, previousValue, newValue, reason, comment)
   }
 
   function showToast(message, duration = 2600) {
@@ -1397,8 +1363,8 @@ function App() {
           id: nextId,
           name: 'Nuevo usuario',
           initials: 'NU',
-          role: 'Responsable del caso',
-          area: 'Responsable del caso',
+          role: 'Responsable de atención',
+          area: 'Responsable de atención',
           active: true,
           primary: false,
         },
@@ -1419,10 +1385,10 @@ function App() {
   function handleAddReasonCatalog() {
     setReasonCatalogs((current) => {
       let nextNumber = current.dateChangeReasons.length + 1
-      let nextId = `MOT-FECHA-${String(nextNumber).padStart(3, '0')}`
+      let nextId = `MOI-FECHA-${String(nextNumber).padStart(3, '0')}`
       while (current.dateChangeReasons.some((reason) => reason.id === nextId)) {
         nextNumber += 1
-        nextId = `MOT-FECHA-${String(nextNumber).padStart(3, '0')}`
+        nextId = `MOI-FECHA-${String(nextNumber).padStart(3, '0')}`
       }
       return {
         ...current,
@@ -1437,7 +1403,7 @@ function App() {
 
   function handleModalConfirm(name, values) {
     if (name === 'Crear caso') {
-      const nextId = `CP-${String(casesData.length + 123).padStart(6, '0')}`
+      const nextId = `CS-${String(casesData.length + 123).padStart(6, '0')}`
       const requestedProformaId = values.proforma.trim()
       const nextProformaId = requestedProformaId ? uniqueProformaId(requestedProformaId, proformasData) : ''
       const clientAssumes = Boolean(values.clientAssumes)
@@ -1450,7 +1416,7 @@ function App() {
         clientAssumes,
         owner: activeUser.name,
         registeredBy: activeUser.name,
-        state: 'Expediente pendiente de completar',
+        state: 'Expediente pendiente',
         availability: 0,
         openPE: 0,
         finiquito: 'No',
@@ -1479,37 +1445,37 @@ function App() {
       return
     }
 
-    if (name === 'Generar PE') {
-      if (role === 'Bodega de Enderezado') {
-        showToast('Bodega queda como visor despues de confirmar disponibilidad')
+    if (name === 'Generar solicitud especial') {
+      if (role === 'Inventario') {
+        showToast('Inventario queda como visor despues de confirmar disponibilidad')
         return
       }
       const targetProforma = currentProforma ? recalculateProforma(currentProforma) : null
       const selectedLines = selectedPELinesForProforma(targetProforma)
       if (!targetProforma || targetProforma.peGenerated || selectedLines.length === 0) {
-        showToast('Seleccione al menos un item faltante para generar PE')
+        showToast('Seleccione al menos un item faltante para generar SE')
         return
       }
       if (!hiddenDamageCanAdvanceInventory(currentCase, targetProforma)) {
-        showToast('Complete y envie el expediente de daño oculto a Bodega antes de generar PE')
+        showToast('Complete y envie el expediente de daño oculto a Inventario antes de generar SE')
         return
       }
-      const nextId = `PE-${String(ordersData.length + 45).padStart(5, '0')}`
+      const nextId = `SE-${String(ordersData.length + 45).padStart(5, '0')}`
       const availabilityBase = scopedAvailabilityBaseForPE(targetProforma, selectedLines)
       const nextPE = {
         id: nextId,
         caseId: currentCase.id,
         client: currentCase.client,
         proforma: targetProforma.id,
-        state: 'Generado',
-        jde: 'Sin JDE',
+        state: 'Generada',
+        jde: 'Sin referencia',
         oc: '-',
         eta: 'Sin fecha',
         alert: 'Sin fecha estimada',
         availability: 0,
         availabilityBase,
         pendingLines: selectedLines.length,
-        nextAction: 'Bodega carga en JDE',
+        nextAction: 'Inventario registra referencia externa',
       }
       setOrdersData((current) => [nextPE, ...current])
       setPeLinesData(selectedLines.map((line) => ({
@@ -1525,8 +1491,8 @@ function App() {
         lineOc: '',
         requiredByWorkshop: 'Sí',
         receivedDate: '-',
-        user: 'Bodega',
-        note: line.authorization === 'No autorizado' ? 'Seleccionado por Jefe sin autorizacion de seguro' : 'Autorizado por seguro',
+        user: 'Inventario',
+        note: line.authorization === 'No autorizado' ? 'Seleccionado por jefatura sin autorización administrativa' : 'Autorizado por autorización administrativa',
       })))
       setProformasData((current) => current.map((item) => item.id === targetProforma.id ? recalculateProforma({
         ...item,
@@ -1541,7 +1507,7 @@ function App() {
               ...line,
               pe: nextId,
               eligible: 'Si',
-              decision: line.authorization === 'Autorizado' ? 'Aprobado seguro' : 'Aprobado por Jefe',
+              decision: line.authorization === 'Autorizado' ? 'Aprobado autorización administrativa' : 'Aprobado por jefatura',
             }
           }
           if (numericValue(line.missing) > 0) {
@@ -1561,55 +1527,55 @@ function App() {
       setCasesData((current) => current.map((item) => item.id === currentCase.id ? {
         ...item,
         openPE: item.openPE + 1,
-        state: 'Pedido especial requerido',
+        state: 'Solicitud especial requerida',
         availability: availabilityBase,
-        nextAction: 'Bodega carga en JDE',
+        nextAction: 'Inventario registra referencia externa',
         updated: 'Ahora',
       } : item))
       setSelectedCase((current) => current?.id === currentCase.id ? {
         ...current,
         openPE: current.openPE + 1,
-        state: 'Pedido especial requerido',
+        state: 'Solicitud especial requerida',
         availability: availabilityBase,
-        nextAction: 'Bodega carga en JDE',
+        nextAction: 'Inventario registra referencia externa',
         updated: 'Ahora',
       } : current)
-      addPEBitacora(nextId, 'PE generado', '-', nextId, 'Items seleccionados por Jefe', 'Solicitud enviada al equipo de Bodega para su carga en JDE')
-      addCaseBitacora(currentCase.id, 'PE generado', '-', nextId, 'Items seleccionados por Jefe', `Disponibilidad recalculada a ${availabilityBase}% excluyendo faltantes no enviados a PE`)
-      showToast('Solicitud enviada al equipo de Bodega para su carga en JDE', 5000)
-      window.setTimeout(() => setModal('Proceder con OT'), 0)
+      addPEBitacora(nextId, 'Solicitud generada', '-', nextId, 'Lineas seleccionadas por jefatura', 'Solicitud enviada a Inventario para referencia externa')
+      addCaseBitacora(currentCase.id, 'Solicitud generada', '-', nextId, 'Lineas seleccionadas por jefatura', `Disponibilidad recalculada a ${availabilityBase}% excluyendo faltantes no enviados a SE`)
+      showToast('Solicitud enviada a Inventario para referencia externa', 5000)
+      window.setTimeout(() => setModal('Continuar reparación'), 0)
       return
     }
 
-    if (name === 'Registrar JDE / OC JDE') {
+    if (name === 'Registrar referencia / orden') {
       const targetId = currentPE.id
-      const registeringJde = role === 'Bodega de Enderezado' || (role === 'Administrador' && currentPE.state === 'Generado')
-      const nextJde = registeringJde ? values.jde.trim() || currentPE.jde || 'Sin JDE' : currentPE.jde
-      const nextOc = registeringJde ? currentPE.oc : values.oc || currentPE.oc || 'OC-4455'
-      const nextPEState = registeringJde ? 'PE solicitado en JDE' : currentPE.state
-      const nextPENextAction = registeringJde ? 'Compras genera OC correspondiente' : 'Asignar fecha estimada'
-      setOrdersData((current) => current.map((item) => item.id === targetId ? { ...item, jde: nextJde, oc: nextOc, state: nextPEState, nextAction: nextPENextAction } : item))
-      setSelectedPE((current) => current ? { ...current, jde: nextJde, oc: nextOc, state: nextPEState, nextAction: nextPENextAction } : current)
-      if (registeringJde) {
+      const registeringReference = role === 'Inventario' || (role === 'Administrador funcional' && currentPE.state === 'Generada')
+      const nextExternalReference = registeringReference ? values.jde.trim() || currentPE.jde || 'Sin referencia' : currentPE.jde
+      const nextOc = registeringReference ? currentPE.oc : values.oc || currentPE.oc || 'OC-4455'
+      const nextPEState = registeringReference ? 'Referenciada externamente' : currentPE.state
+      const nextPENextAction = registeringReference ? 'Compras registra orden de compra' : 'Asignar fecha estimada'
+      setOrdersData((current) => current.map((item) => item.id === targetId ? { ...item, jde: nextExternalReference, oc: nextOc, state: nextPEState, nextAction: nextPENextAction } : item))
+      setSelectedPE((current) => current ? { ...current, jde: nextExternalReference, oc: nextOc, state: nextPEState, nextAction: nextPENextAction } : current)
+      if (registeringReference) {
         setCasesData((current) => current.map((item) => item.id === currentPE.caseId ? {
           ...item,
-          state: 'Pedido especial en seguimiento',
-          nextAction: 'Compras genera OC correspondiente',
+          state: 'Solicitud en seguimiento',
+          nextAction: 'Compras registra orden de compra',
           updated: 'Ahora',
         } : item))
         setSelectedCase((current) => current?.id === currentPE.caseId ? {
           ...current,
-          state: 'Pedido especial en seguimiento',
-          nextAction: 'Compras genera OC correspondiente',
+          state: 'Solicitud en seguimiento',
+          nextAction: 'Compras registra orden de compra',
           updated: 'Ahora',
         } : current)
-        addPEBitacora(targetId, 'Solicitud JDE registrada', currentPE.jde, nextJde, 'Bodega registra solicitud JDE', 'Notificacion enviada a Compras para generar OC')
-        addCaseBitacora(currentPE.caseId, 'Pedido especial en seguimiento', currentPE.state, nextPEState, 'Bodega registra solicitud JDE', `PE ${targetId} asociado a ${nextJde}`)
+        addPEBitacora(targetId, 'Referencia externa registrada', currentPE.jde, nextExternalReference, 'Inventario registra referencia externa', 'Notificacion enviada a Compras para registrar orden de compra')
+        addCaseBitacora(currentPE.caseId, 'Solicitud en seguimiento', currentPE.state, nextPEState, 'Inventario registra referencia externa', `SE ${targetId} asociado a ${nextExternalReference}`)
         showToast('Notificación enviada a Compras', 5000)
         return
       }
-      addPEBitacora(targetId, 'OC JDE registrada', currentPE.oc, nextOc, 'Compras registra OC', values.comment || 'OC JDE registrada por Compras')
-      showToast('OC JDE registrada')
+      addPEBitacora(targetId, 'Orden de compra registrada', currentPE.oc, nextOc, 'Compras registra orden de compra', values.comment || 'Orden registrada por Compras')
+      showToast('Orden de compra registrada')
       return
     }
 
@@ -1638,21 +1604,21 @@ function App() {
         ...item,
         eta: nextEta,
         alert: '30 dias',
-        state: 'PE en camino',
+        state: 'En camino',
         nextAction,
       } : item))
       setSelectedPE((current) => current ? {
         ...current,
         eta: nextEta,
         alert: '30 dias',
-        state: 'PE en camino',
+        state: 'En camino',
         nextAction,
       } : current)
-      const eventName = requiresReason ? 'Cambio de fecha PE' : 'Asignación de fecha PE'
+      const eventName = requiresReason ? 'Cambio de fecha SE' : 'Asignación de fecha SE'
       const eventReason = requiresReason ? (values.reason || 'Cambio de fecha') : 'Fecha nueva'
       if (eventReason !== 'Otro') {
         addPEBitacora(currentPE.id, eventName, currentPE.eta, nextEta, eventReason, values.comment || `Fecha ${nextDate} asignada a ${linesToUpdate.length} linea(s)`)
-        addCaseBitacora(currentPE.caseId, eventName, currentPE.eta, nextEta, eventReason, `PE ${currentPE.id}: fecha ${nextDate} asignada a ${linesToUpdate.length} linea(s)`)
+        addCaseBitacora(currentPE.caseId, eventName, currentPE.eta, nextEta, eventReason, `SE ${currentPE.id}: fecha ${nextDate} asignada a ${linesToUpdate.length} linea(s)`)
       }
       showToast('Se actualizo', 5000)
       return
@@ -1702,7 +1668,7 @@ function App() {
       })
       const nextPEAvailability = peAvailabilityFromLines(nextLines)
       const complete = nextLines.every((line) => line.pending === 0)
-      const nextState = complete ? 'PE recibido completo' : 'PE recibido parcial'
+      const nextState = complete ? 'Recibida completa' : 'Recibida parcial'
       const nextPending = nextLines.filter((line) => line.pending > 0).length
       const previousCaseAvailability = numericValue(relatedCaseBefore?.availability)
       const nextCaseAvailability = caseAvailabilityFromPE(baseAvailability, nextPEAvailability)
@@ -1730,7 +1696,7 @@ function App() {
         return {
           ...item,
           availability: nextCaseAvailability,
-          state: nextCaseAvailability >= 100 ? 'Disponibilidad completa para el caso' : 'Disponibilidad parcial actualizada',
+          state: nextCaseAvailability >= 100 ? 'Disponibilidad completa' : 'Disponibilidad parcial',
           nextAction: nextCaseAvailability >= 100 ? 'Validar cierre' : 'Compras confirma pendientes',
           updated: 'Ahora',
         }
@@ -1740,34 +1706,34 @@ function App() {
         return {
           ...current,
           availability: nextCaseAvailability,
-          state: nextCaseAvailability >= 100 ? 'Disponibilidad completa para el caso' : 'Disponibilidad parcial actualizada',
+          state: nextCaseAvailability >= 100 ? 'Disponibilidad completa' : 'Disponibilidad parcial',
           nextAction: nextCaseAvailability >= 100 ? 'Validar cierre' : 'Compras confirma pendientes',
           updated: 'Ahora',
         }
       })
-      addPEBitacora(currentPE.id, 'Disponibilidad fisica PE', `${currentPE.availability}%`, `${nextPEAvailability}%`, 'Compras confirma recepcion', complete ? 'PE recibido completo' : 'PE recibido parcial')
-      addCaseBitacora(currentPE.caseId, 'Disponibilidad caso', `${previousCaseAvailability}%`, `${nextCaseAvailability}%`, 'Recepcion de Pedido Especial', nextCaseAvailability >= 100 ? 'Caso con disponibilidad completa' : 'Caso con disponibilidad parcial actualizada')
+      addPEBitacora(currentPE.id, 'Disponibilidad fisica SE', `${currentPE.availability}%`, `${nextPEAvailability}%`, 'Compras confirma recepcion', complete ? 'Recibida completa' : 'Recibida parcial')
+      addCaseBitacora(currentPE.caseId, 'Disponibilidad caso', `${previousCaseAvailability}%`, `${nextCaseAvailability}%`, 'Recepcion de Solicitud especial', nextCaseAvailability >= 100 ? 'Caso con disponibilidad completa' : 'Caso con disponibilidad parcial actualizada')
       showToast('Listo', 5000)
       return
     }
 
-    if (name === 'Agregar finiquito') {
+    if (name === 'Agregar compromiso pendiente') {
       if (!canAddFiniquitoDocument(role, currentCase, proformasData)) {
-        showToast('Finiquito disponible solo para Facturacion con OT en ejecucion y ventana de disponibilidad abierta')
+        showToast('Compromiso pendiente disponible solo para Cierre administrativo con Orden interna en ejecución y ventana de disponibilidad abierta')
         return
       }
       const nextFiniquitoCount = caseFiniquitosCount(currentCase) + 1
-      const reference = values.finiquitoReference?.trim() || `FIN-${currentCase.id.replace('CP-', '')}-${String(nextFiniquitoCount).padStart(2, '0')}`
-      const description = values.finiquitoDescription?.trim() || 'Finiquito registrado desde la bandeja documental'
+      const reference = values.finiquitoReference?.trim() || `COM-${currentCase.id.replace('CS-', '')}-${String(nextFiniquitoCount).padStart(2, '0')}`
+      const description = values.finiquitoDescription?.trim() || 'Compromiso pendiente registrado desde la bandeja documental'
       const fileName = values.finiquitoFileName?.trim()
       const finiquitoDocument = fileName
-        ? registeredDocument(`Finiquito ${nextFiniquitoCount}`, reference, description, fileName)
+        ? registeredDocument(`Compromiso pendiente ${nextFiniquitoCount}`, reference, description, fileName)
         : {
-          ...pendingDocument(`Finiquito ${nextFiniquitoCount}`, reference, description),
+          ...pendingDocument(`Compromiso pendiente ${nextFiniquitoCount}`, reference, description),
           reference,
           referencePlaceholder: reference,
           status: 'Registrado',
-          preview: 'Finiquito registrado sin adjunto.',
+          preview: 'Compromiso pendiente registrado sin adjunto.',
         }
       updateCaseDocuments(currentCase.id, (documents) => {
         const nextDocuments = normalizeDocuments(documents)
@@ -1789,7 +1755,7 @@ function App() {
         finiquitosCount: caseFiniquitosCount(item) + 1,
         finiquitoApplied: true,
         otExecutionApproved: false,
-        nextAction: 'Finiquito aplicado',
+        nextAction: 'Compromiso documentado',
         updated: 'Ahora',
       } : item))
       setSelectedCase((current) => current ? {
@@ -1799,23 +1765,23 @@ function App() {
         finiquitosCount: caseFiniquitosCount(current) + 1,
         finiquitoApplied: true,
         otExecutionApproved: false,
-        nextAction: 'Finiquito aplicado',
+        nextAction: 'Compromiso documentado',
         updated: 'Ahora',
       } : current)
-      addCaseBitacora(currentCase.id, 'Finiquito aplicado', '-', reference, 'Facturacion registra finiquito', `${fileName ? description : `${description} (sin adjunto)`}. OT en ejecucion marcada No.`)
-      showToast('Finiquito aplicado al expediente')
+      addCaseBitacora(currentCase.id, 'Compromiso documentado', '-', reference, 'Cierre administrativo registra compromiso pendiente', `${fileName ? description : `${description} (sin adjunto)`}. Orden interna en ejecución marcada No.`)
+      showToast('Compromiso documentado al expediente')
       return
     }
 
     if (name === 'Marcar expediente como completo') {
       setCasesData((current) => current.map((item) => item.id === currentCase.id ? {
         ...item,
-        state: 'En validación de disponibilidad',
-        nextAction: 'Bodega valida disponibilidades',
+        state: 'En validación',
+        nextAction: 'Inventario valida disponibilidades',
         updated: 'Ahora',
       } : item))
-      setSelectedCase((current) => current ? { ...current, state: 'En validación de disponibilidad', nextAction: 'Bodega valida disponibilidades', updated: 'Ahora' } : current)
-      addCaseBitacora(currentCase.id, 'Expediente enviado a Bodega', 'Expediente pendiente de completar', 'En validación de disponibilidad', 'Responsable confirma expediente', 'Solicitud enviada al equipo de Bodega')
+      setSelectedCase((current) => current ? { ...current, state: 'En validación', nextAction: 'Inventario valida disponibilidades', updated: 'Ahora' } : current)
+      addCaseBitacora(currentCase.id, 'Expediente enviado a Inventario', 'Expediente pendiente', 'En validación', 'Responsable confirma expediente', 'Solicitud enviada a Inventario')
       showToast('Se proceso el expediente', 10000)
       return
     }
@@ -1855,7 +1821,7 @@ function App() {
 
     if (name === 'Agregar daño oculto') {
       if (!canAddHiddenDamageDocuments(role, currentCase, activeUser)) {
-        showToast('Daño oculto disponible solo para Jefe con OT en ejecucion')
+        showToast('Daño oculto disponible solo para Jefatura técnica con orden interna en ejecución')
         return
       }
       const reason = values.hiddenDamageReason.trim()
@@ -1882,21 +1848,21 @@ function App() {
       }
       if (!clientAssumes) {
         nextSetDocuments.ocSeguro = values.hiddenDamageOCFileName
-          ? uploadedDocument('OC del seguro daño oculto', ocReference, ocReference || 'Pendiente', 'OC del seguro asociada al daño oculto', values.hiddenDamageOCFileName)
-          : pendingDocument('OC del seguro daño oculto', ocReference || 'Pendiente', 'OC del seguro asociada al daño oculto')
+          ? uploadedDocument('autorización administrativa daño oculto', ocReference, ocReference || 'Pendiente', 'autorización administrativa asociada al daño oculto', values.hiddenDamageOCFileName)
+          : pendingDocument('autorización administrativa daño oculto', ocReference || 'Pendiente', 'autorización administrativa asociada al daño oculto')
       }
       nextSetDocuments.ot = otReference
-        ? registeredDocument('OT daño oculto', otReference, 'OT opcional asociada al daño oculto', values.hiddenDamageOTFileName)
+        ? registeredDocument('Orden interna daño oculto', otReference, 'Orden interna opcional asociada al daño oculto', values.hiddenDamageOTFileName)
         : values.hiddenDamageOTFileName
-          ? uploadedDocument('OT daño oculto', '', 'Opcional', 'OT opcional asociada al daño oculto', values.hiddenDamageOTFileName)
-          : pendingDocument('OT daño oculto', 'Opcional', 'OT opcional asociada al daño oculto')
+          ? uploadedDocument('Orden interna daño oculto', '', 'Opcional', 'Orden interna opcional asociada al daño oculto', values.hiddenDamageOTFileName)
+          : pendingDocument('Orden interna daño oculto', 'Opcional', 'Orden interna opcional asociada al daño oculto')
       const nextSet = {
         id: nextSetId,
         proformaId,
         type: 'Daño oculto',
         reason,
         clientAssumes,
-        sentToBodega: false,
+        sentToInventario: false,
         createdAt: 'Ahora',
         documents: nextSetDocuments,
       }
@@ -1904,7 +1870,7 @@ function App() {
       setSelectedProformaId(proformaId)
       setCasesData((current) => current.map((item) => item.id === currentCase.id ? {
         ...item,
-        state: 'Presupuesto adicional por daño oculto',
+        state: 'Proforma adicional',
         nextAction: 'Cargar detalle de proforma por daño oculto',
         updated: 'Ahora',
         documents: {
@@ -1914,7 +1880,7 @@ function App() {
       } : item))
       setSelectedCase((current) => current ? {
         ...current,
-        state: 'Presupuesto adicional por daño oculto',
+        state: 'Proforma adicional',
         nextAction: 'Cargar detalle de proforma por daño oculto',
         updated: 'Ahora',
         documents: {
@@ -1922,7 +1888,7 @@ function App() {
           supplementalSets: [...normalizeDocuments(current.documents).supplementalSets, nextSet],
         },
       } : current)
-      addCaseBitacora(currentCase.id, 'Daño oculto', '-', proformaId, 'Jefe registra daño oculto', reason)
+      addCaseBitacora(currentCase.id, 'Daño oculto', '-', proformaId, 'Jefatura técnica registra daño oculto', reason)
       showToast('Daño oculto agregado al expediente')
       return
     }
@@ -1940,12 +1906,12 @@ function App() {
         updated: 'Ahora',
       } : item))
       setSelectedCase((current) => current ? { ...current, state: 'Cerrado', otExecutionApproved: false, nextAction: 'Caso cerrado', updated: 'Ahora' } : current)
-      addCaseBitacora(currentCase.id, 'Cierre de caso', currentCase.state, 'Cerrado', 'Disponibilidad completa', 'Caso cerrado desde el workspace. OT en ejecucion marcada No.')
+      addCaseBitacora(currentCase.id, 'Cierre de caso', currentCase.state, 'Cerrado', 'Disponibilidad completa', 'Caso cerrado desde el workspace. Orden interna en ejecución marcada No.')
       showToast('Listo')
       return
     }
 
-    if (name === 'Proceder con OT') {
+    if (name === 'Continuar reparación') {
       handleProceedOT(values)
       return
     }
@@ -1956,8 +1922,8 @@ function App() {
     }
 
     if (name === 'Decision operativa') {
-      if (role === 'Bodega de Enderezado') {
-        showToast('La decision de elegibilidad PE corresponde a Jefe de Enderezado')
+      if (role === 'Inventario') {
+        showToast('La decision de elegibilidad SE corresponde a Jefatura técnica')
         return
       }
       if (!currentProforma) {
@@ -1973,12 +1939,12 @@ function App() {
           eligible: line.missing > 0 && line.authorization === 'No autorizado' ? line.eligible || 'Si' : 'No aplica',
         })),
       } : item))
-      showToast('Proceso de Pedido Especial aprobado por Jefe')
+      showToast('Proceso de solicitud especial aprobado por Jefatura técnica')
       return
     }
 
     if (name === 'Validar cierre') {
-      showToast('Cierre bloqueado: existen PE, lineas o finiquitos pendientes')
+      showToast('Cierre bloqueado: existen SE, lineas o compromiso pendientes pendientes')
     }
 
     if (name === 'Revertir ultima confirmacion') {
@@ -2045,7 +2011,7 @@ function App() {
   }
 
   function handleAddFiniquito() {
-    setModal('Agregar finiquito')
+    setModal('Agregar compromiso pendiente')
   }
 
   function handleMarkHiddenDamageComplete(setId) {
@@ -2055,8 +2021,8 @@ function App() {
       showToast('Seleccione un expediente de daño oculto')
       return
     }
-    if (!hiddenDamageSetReadyForBodega(currentCase, targetSet)) {
-      showToast(targetSet.clientAssumes ? 'Cargue Proforma para enviar el daño oculto a Bodega' : 'Cargue Proforma y OC del seguro para enviar el daño oculto a Bodega')
+    if (!hiddenDamageSetReadyForInventario(currentCase, targetSet)) {
+      showToast(targetSet.clientAssumes ? 'Cargue Proforma para enviar el daño oculto a Inventario' : 'Cargue Proforma y autorización administrativa para enviar el daño oculto a Inventario')
       return
     }
     const proformaId = targetSet.proformaId || targetSet.documents?.proforma?.reference
@@ -2066,28 +2032,28 @@ function App() {
         ...nextDocuments,
         supplementalSets: nextDocuments.supplementalSets.map((set) => set.id === setId ? {
           ...set,
-          sentToBodega: true,
+          sentToInventario: true,
           sentAt: 'Ahora',
         } : set),
       }
     }
     setCasesData((current) => current.map((item) => item.id === currentCase.id ? {
       ...item,
-      state: 'En validación de disponibilidad',
-      nextAction: 'Bodega valida disponibilidad de daño oculto',
+      state: 'En validación',
+      nextAction: 'Inventario valida disponibilidad de daño oculto',
       updated: 'Ahora',
       documents: updateDocuments(item.documents),
     } : item))
     setSelectedCase((current) => current ? {
       ...current,
-      state: 'En validación de disponibilidad',
-      nextAction: 'Bodega valida disponibilidad de daño oculto',
+      state: 'En validación',
+      nextAction: 'Inventario valida disponibilidad de daño oculto',
       updated: 'Ahora',
       documents: updateDocuments(current.documents),
     } : current)
     if (proformaId) setSelectedProformaId(proformaId)
-    addCaseBitacora(currentCase.id, 'Expediente daño oculto enviado a Bodega', '-', proformaId || setId, 'Jefe completa documentos minimos', 'Bodega puede cargar disponibilidad de la proforma de daño oculto')
-    showToast('Solicitud enviada al equipo de Bodega', 10000)
+    addCaseBitacora(currentCase.id, 'Expediente daño oculto enviado a Inventario', '-', proformaId || setId, 'Jefatura técnica completa documentos minimos', 'Inventario puede cargar disponibilidad de la proforma de daño oculto')
+    showToast('Solicitud enviada a Inventario', 10000)
   }
 
   function handleRenameProforma(proformaId, nextId) {
@@ -2122,15 +2088,15 @@ function App() {
   function handleRequestAvailabilityValidation() {
     setCasesData((current) => current.map((item) => item.id === currentCase.id ? {
       ...item,
-      state: 'En validación de disponibilidad',
-      nextAction: 'Bodega valida disponibilidades',
+      state: 'En validación',
+      nextAction: 'Inventario valida disponibilidades',
       updated: 'Ahora',
     } : item))
     showToast('Solicitud de validación enviada')
   }
 
   function handleProformaLineChange(proformaId, lineIndex, field, value) {
-    if (role === 'Bodega de Enderezado' && field === 'item') return
+    if (role === 'Inventario' && field === 'item') return
     setProformasData((current) => current.map((proforma) => {
       if (proforma.id !== proformaId) return proforma
       const nextLines = proforma.lines.map((line, index) => {
@@ -2140,7 +2106,7 @@ function App() {
             ...line,
             peSelected: value,
             eligible: value ? 'Si' : 'No',
-            decision: value ? 'Aprobado por Jefe' : 'Pendiente Jefe',
+            decision: value ? 'Aprobado por jefatura' : 'Pendiente jefatura',
           }
         }
         return {
@@ -2163,12 +2129,12 @@ function App() {
 
   function handlePrepareSpecialOrder(proformaId) {
     const targetProforma = proformasData.find((item) => item.id === proformaId)
-    if (!(role === 'Administrador' || role === 'Jefe de Enderezado') || currentCase.state !== 'Pedido especial requerido' || !isConfirmedValidProforma(targetProforma) || targetProforma.peGenerated) {
-      showToast('Pedido Especial disponible solo para proformas validas pendientes de solicitud')
+    if (!(role === 'Administrador funcional' || role === 'Jefatura técnica') || currentCase.state !== 'Solicitud especial requerida' || !isConfirmedValidProforma(targetProforma) || targetProforma.peGenerated) {
+      showToast('Solicitud especial disponible solo para proformas validas pendientes de solicitud')
       return
     }
     if (!hiddenDamageCanAdvanceInventory(currentCase, targetProforma)) {
-      showToast('Complete y envie el expediente de daño oculto a Bodega antes de solicitar PE')
+      showToast('Complete y envie el expediente de daño oculto a Inventario antes de solicitar SE')
       return
     }
     setProformasData((current) => current.map((item) => item.id === proformaId ? recalculateProforma({
@@ -2190,31 +2156,31 @@ function App() {
           ...line,
           peSelected: preselected,
           eligible: preselected ? 'Si' : line.eligible || 'No',
-          decision: preselected ? 'Aprobado seguro' : line.decision || 'Pendiente Jefe',
+          decision: preselected ? 'Aprobado autorización administrativa' : line.decision || 'Pendiente jefatura',
         }
       }),
     }) : item))
-    showToast('Seleccione los items para Pedido Especial')
+    showToast('Seleccione los items para Solicitud especial')
   }
 
   function handleProceedOT(values = {}) {
-    if (!(role === 'Administrador' || role === 'Jefe de Enderezado') || currentCase.otExecutionApproved) return
+    if (!(role === 'Administrador funcional' || role === 'Jefatura técnica') || currentCase.otExecutionApproved) return
     const nextOtReference = values.otExecutionNumber?.trim()
     const otContext = otReferenceContextForExecution(currentCase)
     if (!hasActualDocumentReference(otContext.document) && !nextOtReference) {
-      showToast('Ingrese el numero de OT para marcar ejecucion')
+      showToast('Ingrese el numero de Orden interna para marcar ejecucion')
       return
     }
-    const nextAction = currentCase.state === 'Pedido especial requerido' ? 'OT en ejecucion con PE pendiente' : 'OT en ejecucion'
+    const nextAction = currentCase.state === 'Solicitud especial requerida' ? 'Orden interna en ejecución con SE pendiente' : 'Orden interna en ejecución'
     const activeOtReference = nextOtReference || otContext.document?.reference || ''
     const updateOTDocument = (documents) => patchDocumentAt(documents, otContext.target, (document) => {
-      const nextDocument = document || pendingDocument(otContext.target.title, nextOtReference || '', 'Orden de taller asociada al caso')
+      const nextDocument = document || pendingDocument(otContext.target.title, nextOtReference || '', 'Orden interna asociada al caso')
       return {
         ...nextDocument,
         title: nextDocument.title || otContext.target.title,
         reference: activeOtReference,
         referencePlaceholder: nextDocument.referencePlaceholder || activeOtReference,
-        description: nextDocument.description || 'Orden de taller asociada al caso',
+        description: nextDocument.description || 'Orden interna asociada al caso',
         status: nextDocument.status || 'Pendiente',
       }
     })
@@ -2232,8 +2198,8 @@ function App() {
       updated: 'Ahora',
       documents: nextOtReference ? updateOTDocument(current.documents) : current.documents,
     } : current)
-    addCaseBitacora(currentCase.id, 'OT en ejecucion', '-', 'Aprobada', 'Jefe de Enderezado aprueba ejecucion', activeOtReference ? `OT ${activeOtReference}` : (currentCase.state === 'Pedido especial requerido' ? 'Ejecucion con PE pendiente' : 'Disponibilidad completa'))
-    showToast('OT marcada en ejecucion')
+    addCaseBitacora(currentCase.id, 'Orden interna en ejecución', '-', 'Aprobada', 'Jefatura técnica aprueba ejecucion', activeOtReference ? `Orden interna ${activeOtReference}` : (currentCase.state === 'Solicitud especial requerida' ? 'Ejecucion con SE pendiente' : 'Disponibilidad completa'))
+    showToast('Orden interna marcada en ejecución')
   }
 
   function handlePELineSelection(lineIndex, selected) {
@@ -2254,8 +2220,8 @@ function App() {
     if (isPEComplete(currentPE)) return
     setPeLinesData((current) => normalizePELines(current).map((line, index) => {
       if (index !== lineIndex) return line
-      if (field === 'requiredByWorkshop' && !(role === 'Bodega de Enderezado' || role === 'Administrador')) return line
-      if (field === 'lineOc' && !(role === 'Compras' || role === 'Administrador')) return line
+      if (field === 'requiredByWorkshop' && !(role === 'Inventario' || role === 'Administrador funcional')) return line
+      if (field === 'lineOc' && !(role === 'Compras' || role === 'Administrador funcional')) return line
       if (field === 'lineOc' && (line.state === 'Completo' || line.pending === 0)) return line
       if (field === 'received' && (!canManagePEReceipt(role) || !line.selected)) return line
       if (field === 'received') {
@@ -2265,10 +2231,10 @@ function App() {
         }
       }
       if (field === 'lineOc') {
-        addPEBitacora(currentPE.id, 'OC linea PE', line.lineOc || '-', value || '-', 'Compras ajusta OC por linea', `${currentPE.id} / ${line.sku}`)
+        addPEBitacora(currentPE.id, 'Orden linea SE', line.lineOc || '-', value || '-', 'Compras ajusta orden por linea', `${currentPE.id} / ${line.sku}`)
       }
       if (field === 'requiredByWorkshop') {
-        addPEBitacora(currentPE.id, 'Requerido por Taller', line.requiredByWorkshop || 'Sí', value, 'Bodega ajusta requerimiento', `${currentPE.id} / ${line.sku}`)
+        addPEBitacora(currentPE.id, 'Requerido por Taller', line.requiredByWorkshop || 'Sí', value, 'Inventario ajusta requerimiento', `${currentPE.id} / ${line.sku}`)
       }
       return {
         ...line,
@@ -2288,8 +2254,8 @@ function App() {
     setSelectedPE((current) => current?.id === lastReceptionSnapshot.peId ? lastReceptionSnapshot.order : current)
     setCasesData((current) => current.map((item) => item.id === lastReceptionSnapshot.caseId ? lastReceptionSnapshot.caseItem : item))
     setSelectedCase((current) => current?.id === lastReceptionSnapshot.caseId ? lastReceptionSnapshot.caseItem : current)
-    addPEBitacora(currentPE.id, 'Reversion disponibilidad fisica', currentPE.state, lastReceptionSnapshot.order.state, 'Compras revierte ultima confirmacion', `PE ${currentPE.id}`)
-    addCaseBitacora(lastReceptionSnapshot.caseId, 'Reversion disponibilidad caso', `${numericValue(currentCaseBeforeRevert?.availability)}%`, `${numericValue(lastReceptionSnapshot.caseItem?.availability)}%`, 'Reversion de recepcion PE', `Caso ${lastReceptionSnapshot.caseId}`)
+    addPEBitacora(currentPE.id, 'Reversion disponibilidad fisica', currentPE.state, lastReceptionSnapshot.order.state, 'Compras revierte ultima confirmacion', `SE ${currentPE.id}`)
+    addCaseBitacora(lastReceptionSnapshot.caseId, 'Reversion disponibilidad caso', `${numericValue(currentCaseBeforeRevert?.availability)}%`, `${numericValue(lastReceptionSnapshot.caseItem?.availability)}%`, 'Reversion de recepcion SE', `Caso ${lastReceptionSnapshot.caseId}`)
     setLastReceptionSnapshot(null)
     showToast('Notificación enviada a los involucrados del caso', 5000)
   }
@@ -2328,22 +2294,22 @@ function App() {
       }
     })
     const existingTargetProforma = currentCaseProformas.find((item) => item.id === proformaId) || currentCaseProformas.find((item) => item.excelState === 'Pendiente')
-    if (!can(role, 'Cargar Excel') || !existingTargetProforma || existingTargetProforma.excelState !== 'Pendiente' || currentCase.state !== 'En validación de disponibilidad') {
+    if (!can(role, 'Cargar Excel') || !existingTargetProforma || existingTargetProforma.excelState !== 'Pendiente' || currentCase.state !== 'En validación') {
       showToast('La carga de detalle solo esta disponible en validación de disponibilidad')
       return
     }
     let nextNumber = proformasData.length + 1
-    let targetProformaId = existingTargetProforma?.id || `PF-${String(nextNumber).padStart(3, '0')}`
+    let targetProformaId = existingTargetProforma?.id || `PR-${String(nextNumber).padStart(3, '0')}`
     while (!existingTargetProforma && proformasData.some((item) => item.id === targetProformaId)) {
       nextNumber += 1
-      targetProformaId = `PF-${String(nextNumber).padStart(3, '0')}`
+      targetProformaId = `PR-${String(nextNumber).padStart(3, '0')}`
     }
     const requiredTotal = nextLines.reduce((sum, line) => sum + line.required, 0)
     const availableTotal = nextLines.reduce((sum, line) => sum + line.available, 0)
     const availability = requiredTotal ? Math.round((availableTotal / requiredTotal) * 100) : 0
     const decisions = nextLines.filter((line) => line.authorization === 'No autorizado').length
     if (existingTargetProforma?.type === 'Daño oculto' && !hiddenDamageCanAdvanceInventory(currentCase, existingTargetProforma)) {
-      showToast('Complete y envie el expediente de daño oculto a Bodega antes de cargar detalle')
+      showToast('Complete y envie el expediente de daño oculto a Inventario antes de cargar detalle')
       return
     }
     const hiddenDamageSet = existingTargetProforma?.type === 'Daño oculto'
@@ -2382,7 +2348,7 @@ function App() {
         preview: `Excel de ${targetProformaId} cargado con lineas importadas.`,
       })),
     } : item))
-    addCaseBitacora(currentCase.id, 'Detalle de proforma cargado', '-', targetProformaId, 'Bodega carga detalle', `Disponibilidad preliminar ${availability}%`)
+    addCaseBitacora(currentCase.id, 'Detalle de proforma cargado', '-', targetProformaId, 'Inventario carga detalle', `Disponibilidad preliminar ${availability}%`)
     showToast('Detalle de proforma cargado')
   }
 
@@ -2407,19 +2373,19 @@ function App() {
       nextAction: 'Cargar detalle de proforma',
       updated: 'Ahora',
     } : item))
-    addCaseBitacora(currentCase.id, 'Detalle de proforma limpiado', targetProforma.id, '-', 'Bodega limpia detalle', 'Disponibilidad preliminar reiniciada')
+    addCaseBitacora(currentCase.id, 'Detalle de proforma limpiado', targetProforma.id, '-', 'Inventario limpia detalle', 'Disponibilidad preliminar reiniciada')
     showToast('Detalle de proforma limpiado')
   }
 
   function handleConfirmAvailability() {
     const targetProforma = currentProforma ? recalculateProforma(currentProforma) : null
     if (!hiddenDamageCanAdvanceInventory(currentCase, targetProforma)) {
-      showToast('Complete y envie el expediente de daño oculto a Bodega antes de confirmar disponibilidad')
+      showToast('Complete y envie el expediente de daño oculto a Inventario antes de confirmar disponibilidad')
       return
     }
     const complete = targetProforma.availability >= 100
-    const nextState = complete ? 'Disponibilidad completa para el caso' : 'Pedido especial requerido'
-    const nextAction = complete ? 'Jefe valida inicio de reparacion' : 'Jefe aprueba items para Pedido Especial'
+    const nextState = complete ? 'Disponibilidad completa' : 'Solicitud especial requerida'
+    const nextAction = complete ? 'Jefatura técnica valida inicio de reparación' : 'Jefatura técnica aprueba items para solicitud especial'
     setProformasData((current) => current.map((item) => item.id === targetProforma.id ? { ...targetProforma, availabilityConfirmed: true } : item))
     setCasesData((current) => current.map((item) => item.id === currentCase.id ? {
       ...item,
@@ -2429,8 +2395,8 @@ function App() {
       updated: 'Ahora',
     } : item))
     setSelectedCase((current) => current ? { ...current, state: nextState, availability: targetProforma.availability, nextAction, updated: 'Ahora' } : current)
-    addCaseBitacora(currentCase.id, 'Disponibilidad confirmada', currentCase.state, nextState, 'Bodega valida detalle', complete ? 'Disponibilidad al 100%' : 'Solicitud enviada a Jefe de Enderezado')
-    showToast('Solicitud enviada a Jefe de Enderezado', 5000)
+    addCaseBitacora(currentCase.id, 'Disponibilidad confirmada', currentCase.state, nextState, 'Inventario valida detalle', complete ? 'Disponibilidad al 100%' : 'Solicitud enviada a Jefatura técnica')
+    showToast('Solicitud enviada a Jefatura técnica', 5000)
   }
 
   return (
@@ -2446,9 +2412,9 @@ function App() {
 
         <nav className="nav">
           <NavButton active={section === 'cases'} icon={BriefcaseBusiness} label="Casos" onClick={() => resetToList('cases')} />
-          <NavButton active={section === 'orders'} icon={Boxes} label="Pedidos Especiales" onClick={() => resetToList('orders')} />
-          {role === 'Administrador' && (
-            <NavButton active={section === 'admin'} icon={Cog} label="Administracion" onClick={() => { setSection('admin'); setSelectedCase(null); setSelectedPE(null) }} />
+          <NavButton active={section === 'orders'} icon={Boxes} label="Solicitudes especiales" onClick={() => resetToList('orders')} />
+          {role === 'Administrador funcional' && (
+            <NavButton active={section === 'admin'} icon={Cog} label="Administración" onClick={() => { setSection('admin'); setSelectedCase(null); setSelectedPE(null) }} />
           )}
         </nav>
 
@@ -2526,12 +2492,12 @@ function App() {
             onMarkHiddenDamageComplete={handleMarkHiddenDamageComplete}
             onOpenPE={openPE}
             onOpenPEBitacora={openPEBitacora}
-            onRegisterJDE={openJDERegistration}
+            onRegisterReference={openReferenceRegistration}
           />
         )}
 
         {section === 'orders' && !selectedPE && (
-          <OrdersList role={role} ordersData={ordersData} filtersOpen={orderFiltersOpen} setFiltersOpen={setOrderFiltersOpen} onOpenPE={openPE} onOpenCase={openCase} onRegisterJDE={openJDERegistration} />
+          <OrdersList role={role} ordersData={ordersData} filtersOpen={orderFiltersOpen} setFiltersOpen={setOrderFiltersOpen} onOpenPE={openPE} onOpenCase={openCase} onRegisterReference={openReferenceRegistration} />
         )}
 
         {section === 'orders' && selectedPE && (
@@ -2566,7 +2532,7 @@ function App() {
 
       {toast && <div className="toast"><CheckCircle2 size={16} /> {toast}</div>}
       {modal && <Modal name={modal} role={role} currentCase={selectedPE ? currentPECase : currentCase} currentProforma={currentProforma} currentPE={currentPE} peLinesData={peLinesData} lastReceptionSnapshot={lastReceptionSnapshot} dateChangeReasons={dateChangeReasons} onConfirm={handleModalConfirm} onClose={() => setModal(null)} />}
-      {drawer && <Drawer name={drawer} role={role} bitacoraData={bitacoraData} entityScope={drawer === 'Bitacora del PE' ? 'PE' : drawer === 'Historial del caso' ? 'Caso' : ''} entityId={drawer === 'Bitacora del PE' ? currentPE.id : currentCase.id} onClose={() => setDrawer(null)} />}
+      {drawer && <Drawer name={drawer} role={role} bitacoraData={bitacoraData} entityScope={drawer === 'Bitacora de la solicitud' ? 'SE' : drawer === 'Historial del caso' ? 'Caso' : ''} entityId={drawer === 'Bitacora de la solicitud' ? currentPE.id : currentCase.id} onClose={() => setDrawer(null)} />}
     </div>
   )
 }
@@ -2594,7 +2560,7 @@ function TopBar({ title, section, role, activeUser, currentCase, ordersData, pro
           </button>
         )}
         <div>
-          <p>{section === 'orders' ? 'Operacion de PE' : section === 'admin' ? 'Configuracion' : 'Operacion de casos'}</p>
+          <p>{section === 'orders' ? 'Operacion de SE' : section === 'admin' ? 'Configuracion' : 'Operacion de casos'}</p>
           <h1>{title}</h1>
         </div>
       </div>
@@ -2602,8 +2568,8 @@ function TopBar({ title, section, role, activeUser, currentCase, ordersData, pro
         {insideWorkspace && (
           <>
             {showProceedOT && (
-              <button type="button" className="primary" onClick={() => onModal('Proceder con OT')}>
-                <CheckCircle2 size={16} /> Proceder con OT
+              <button type="button" className="primary" onClick={() => onModal('Continuar reparación')}>
+                <CheckCircle2 size={16} /> Proceder con orden interna
               </button>
             )}
             {showCloseCase && (
@@ -2611,13 +2577,13 @@ function TopBar({ title, section, role, activeUser, currentCase, ordersData, pro
                 type="button"
                 className={`primary ${closeCaseEnabled ? '' : 'disabled'}`}
                 disabled={!closeCaseEnabled}
-                title={closeCaseEnabled ? 'Cerrar caso' : 'Disponible con disponibilidad completa del caso y OT en ejecucion'}
+                title={closeCaseEnabled ? 'Cerrar caso' : 'Disponible con disponibilidad completa del caso y Orden interna en ejecución'}
                 onClick={() => onModal('Cerrar caso')}
               >
                 {closeCaseEnabled ? <CheckCircle2 size={16} /> : <Lock size={16} />} Cerrar caso
               </button>
             )}
-            <button type="button" className="secondary" onClick={() => onOpenDrawer(section === 'orders' && selectedPE ? 'Bitacora del PE' : 'Historial del caso')}>
+            <button type="button" className="secondary" onClick={() => onOpenDrawer(section === 'orders' && selectedPE ? 'Bitacora de la solicitud' : 'Historial del caso')}>
               <History size={16} /> Bitacora
             </button>
           </>
@@ -2630,6 +2596,11 @@ function TopBar({ title, section, role, activeUser, currentCase, ordersData, pro
 function CasesList({ role, casesData, caseFilters, filtersOpen, setFiltersOpen, onOpenCase, onModal }) {
   const showFiniquitoColumn = casesData.some(caseHasFiniquito)
   const showFiniquitoCountColumn = casesData.some((item) => caseFiniquitosCount(item) > 1)
+  const openCases = casesData.filter((item) => item.state !== 'Cerrado').length
+  const pendingExpedientes = casesData.filter((item) => item.state === 'Expediente pendiente').length
+  const openSpecialRequests = casesData.reduce((sum, item) => sum + numericValue(item.openPE), 0)
+  const partialReceipts = casesData.filter((item) => item.state === 'Disponibilidad parcial' || (item.availability > 0 && item.availability < 100 && item.openPE > 0)).length
+  const readyForClose = casesData.filter((item) => item.state === 'Listo para cierre').length
   const columns = [
     'No. caso',
     'Cliente',
@@ -2637,9 +2608,9 @@ function CasesList({ role, casesData, caseFilters, filtersOpen, setFiltersOpen, 
     'Responsable',
     'Estado',
     'Disponibilidad',
-    'PE abiertos',
-    ...(showFiniquitoColumn ? ['Tiene finiquito'] : []),
-    ...(showFiniquitoCountColumn ? ['# finiquitos'] : []),
+    'Solicitudes abiertas',
+    ...(showFiniquitoColumn ? ['Compromiso pendiente'] : []),
+    ...(showFiniquitoCountColumn ? ['# compromisos'] : []),
     'Ultima actualizacion',
     '',
   ]
@@ -2666,6 +2637,14 @@ function CasesList({ role, casesData, caseFilters, filtersOpen, setFiltersOpen, 
         <FilterGrid filters={caseFilters} />
       )}
 
+      <div className="summary-band">
+        <Metric compact icon={BriefcaseBusiness} label="Casos abiertos" value={openCases} />
+        <Metric compact icon={FileText} label="Expedientes pendientes" value={pendingExpedientes} />
+        <Metric compact icon={Boxes} label="Solicitudes abiertas" value={openSpecialRequests} />
+        <Metric compact icon={PackageCheck} label="Recepciones parciales" value={partialReceipts} />
+        <Metric compact icon={CheckCircle2} label="Listos para cierre" value={readyForClose} />
+      </div>
+
       <DataTable
         columns={columns}
         rows={casesData.map((item) => [
@@ -2676,7 +2655,7 @@ function CasesList({ role, casesData, caseFilters, filtersOpen, setFiltersOpen, 
           <Pill key="state" tone="blue">{item.state}</Pill>,
           <Progress key="progress" value={item.availability} />,
           item.openPE,
-          ...(showFiniquitoColumn ? [caseHasFiniquito(item) ? <Pill key="finiquito" tone="orange">Si</Pill> : ''] : []),
+          ...(showFiniquitoColumn ? [caseHasFiniquito(item) ? <Pill key="compromiso pendiente" tone="orange">Si</Pill> : ''] : []),
           ...(showFiniquitoCountColumn ? [caseFiniquitosCount(item) > 1 ? caseFiniquitosCount(item) : ''] : []),
           item.updated,
           <button key="open" type="button" className="row-action" onClick={() => onOpenCase(item)}>Abrir <ChevronRight size={14} /></button>,
@@ -2686,7 +2665,7 @@ function CasesList({ role, casesData, caseFilters, filtersOpen, setFiltersOpen, 
   )
 }
 
-function CaseWorkspace({ role, activeUser, ordersData, proformasData, selectedProformaId, currentCase, tab, setTab, onModal, onDrawer, onSelectProforma, onRenameProforma, onLoadExcelDetail, onClearProformaDetail, onAddAdditionalDocument, onAddHiddenDamage, onAddFiniquito, onRequestAvailabilityValidation, onProformaLineChange, onPrepareSpecialOrder, onLoadDocument, onUpdateDocumentMeta, onRemoveDocument, onMarkExpedienteComplete, onMarkHiddenDamageComplete, onOpenPE, onOpenPEBitacora, onRegisterJDE }) {
+function CaseWorkspace({ role, activeUser, ordersData, proformasData, selectedProformaId, currentCase, tab, setTab, onModal, onDrawer, onSelectProforma, onRenameProforma, onLoadExcelDetail, onClearProformaDetail, onAddAdditionalDocument, onAddHiddenDamage, onAddFiniquito, onRequestAvailabilityValidation, onProformaLineChange, onPrepareSpecialOrder, onLoadDocument, onUpdateDocumentMeta, onRemoveDocument, onMarkExpedienteComplete, onMarkHiddenDamageComplete, onOpenPE, onOpenPEBitacora, onRegisterReference }) {
   const visibleTabs = visibleCaseTabsFor(currentCase, ordersData, proformasData)
   const activeTab = visibleTabs.includes(tab) ? tab : 'Expediente'
   const hasFiniquito = caseHasFiniquito(currentCase)
@@ -2697,10 +2676,10 @@ function CaseWorkspace({ role, activeUser, ordersData, proformasData, selectedPr
     ['Responsable', currentCase.owner],
     ['Estado', currentCase.state],
     ['Disponibilidad', `${currentCase.availability}%`],
-    ['PE abiertos', currentCase.openPE],
-    ['OT en ejecucion', currentCase.otExecutionApproved ? 'Si' : 'No'],
-    ...(hasFiniquito ? [['Tiene finiquito', <Pill key="has-finiquito" tone="orange">Si</Pill>]] : []),
-    ...(finiquitosCount > 1 ? [['# finiquitos', finiquitosCount]] : []),
+    ['Solicitudes abiertas', currentCase.openPE],
+    ['Orden interna en ejecución', currentCase.otExecutionApproved ? 'Si' : 'No'],
+    ...(hasFiniquito ? [['Compromiso pendiente', <Pill key="has-compromiso pendiente" tone="orange">Si</Pill>]] : []),
+    ...(finiquitosCount > 1 ? [['# compromisos', finiquitosCount]] : []),
   ]
   return (
     <section className="workspace">
@@ -2713,7 +2692,7 @@ function CaseWorkspace({ role, activeUser, ordersData, proformasData, selectedPr
       <div className="tab-panel">
         {activeTab === 'Expediente' && <ExpedienteTab role={role} activeUser={activeUser} currentCase={currentCase} proformasData={proformasData} onAddAdditionalDocument={onAddAdditionalDocument} onAddHiddenDamage={onAddHiddenDamage} onAddFiniquito={onAddFiniquito} onLoadDocument={onLoadDocument} onUpdateDocumentMeta={onUpdateDocumentMeta} onRemoveDocument={onRemoveDocument} onMarkExpedienteComplete={onMarkExpedienteComplete} onMarkHiddenDamageComplete={onMarkHiddenDamageComplete} />}
         {activeTab === 'Proformas' && <ProformasTab role={role} proformasData={proformasData} selectedProformaId={selectedProformaId} currentCase={currentCase} onSelectProforma={onSelectProforma} onRenameProforma={onRenameProforma} onLoadExcelDetail={onLoadExcelDetail} onClearProformaDetail={onClearProformaDetail} onRequestAvailabilityValidation={onRequestAvailabilityValidation} onProformaLineChange={onProformaLineChange} onPrepareSpecialOrder={onPrepareSpecialOrder} onModal={onModal} onDrawer={onDrawer} />}
-        {activeTab === 'Pedidos Especiales' && <CasePETab role={role} ordersData={ordersData} currentCase={currentCase} onOpenPE={onOpenPE} onOpenPEBitacora={onOpenPEBitacora} onRegisterJDE={onRegisterJDE} />}
+        {activeTab === 'Solicitudes especiales' && <CasePETab role={role} ordersData={ordersData} currentCase={currentCase} onOpenPE={onOpenPE} onOpenPEBitacora={onOpenPEBitacora} onRegisterReference={onRegisterReference} />}
       </div>
     </section>
   )
@@ -2724,9 +2703,9 @@ function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAddi
   const [expandedGroups, setExpandedGroups] = useState({ base: true, additional: true })
   const documents = normalizeDocuments(currentCase.documents)
   const canManageDocuments = canManageCaseDocuments(role, currentCase, activeUser)
-  const canAddDocuments = canManageDocuments && (role === 'Administrador' || currentCase.state !== 'Cerrado')
-  const canEditDocuments = role === 'Administrador' || (canManageDocuments && currentCase.state === 'Expediente pendiente de completar')
-  const canDeleteDocuments = role === 'Administrador' || (canManageDocuments && currentCase.state === 'Expediente pendiente de completar')
+  const canAddDocuments = canManageDocuments && (role === 'Administrador funcional' || currentCase.state !== 'Cerrado')
+  const canEditDocuments = role === 'Administrador funcional' || (canManageDocuments && currentCase.state === 'Expediente pendiente')
+  const canDeleteDocuments = role === 'Administrador funcional' || (canManageDocuments && currentCase.state === 'Expediente pendiente')
   const canAddDamage = canAddHiddenDamageDocuments(role, currentCase, activeUser)
   const canAddFiniquito = canAddFiniquitoDocument(role, currentCase, proformasData)
   const baseDocuments = Object.entries(baseDocumentMeta)
@@ -2748,7 +2727,7 @@ function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAddi
     title: set.type,
     description: set.reason,
     set,
-    sentToBodega: Boolean(set.sentToBodega),
+    sentToInventario: Boolean(set.sentToInventario),
     documents: Object.entries(set.documents || {})
       .filter(([key]) => !(set.clientAssumes && key === 'ocSeguro'))
       .map(([key, document]) => ({
@@ -2769,7 +2748,7 @@ function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAddi
     {
       id: 'base',
       title: 'Expediente base',
-      description: currentCase.clientAssumes ? 'OT y Presupuesto/Proforma' : 'OT, Presupuesto/Proforma y OC del seguro',
+      description: currentCase.clientAssumes ? 'Orden interna y Presupuesto/Proforma' : 'Orden interna, Presupuesto/Proforma y autorización administrativa',
       documents: baseDocuments,
     },
   ]
@@ -2777,12 +2756,12 @@ function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAddi
   const loadedCount = allDocuments.filter(({ document }) => hasDocumentFile(document)).length
   const pendingCount = Math.max(allDocuments.length - loadedCount, 0)
   const requiredDocumentsReady = baseDocuments.filter(({ id }) => id !== 'ot').every(({ document }) => isDocumentReady(document))
-  const canMarkComplete = canManageDocuments && (requiredDocumentsReady || pendingCount >= 0) && currentCase.state === 'Expediente pendiente de completar'
+  const canMarkComplete = canManageDocuments && (requiredDocumentsReady || pendingCount >= 0) && currentCase.state === 'Expediente pendiente'
 
   function canUpdateDocument(target, document) {
     if (target.scope === 'set') {
       const targetSet = documents.supplementalSets.find((set) => set.id === target.setId)
-      if (targetSet?.sentToBodega && ['proforma', 'ocSeguro'].includes(target.key) && role !== 'Administrador') {
+      if (targetSet?.sentToInventario && ['proforma', 'ocSeguro'].includes(target.key) && role !== 'Administrador funcional') {
         return false
       }
     }
@@ -2793,7 +2772,7 @@ function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAddi
     if (target.scope === 'set') {
       return canManageDocuments && currentCase.state !== 'Cerrado'
     }
-    if (target.scope === 'additional' && String(document?.title || '').startsWith('Finiquito')) {
+    if (target.scope === 'additional' && String(document?.title || '').startsWith('Compromiso pendiente')) {
       return canAddFiniquitoDocument(role, currentCase, proformasData)
     }
     return false
@@ -2803,10 +2782,10 @@ function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAddi
     return Boolean(
       group.set
       && group.set.type === 'Daño oculto'
-      && !group.sentToBodega
+      && !group.sentToInventario
       && canManageDocuments
       && currentCase.state !== 'Cerrado'
-      && hiddenDamageSetReadyForBodega(currentCase, group.set)
+      && hiddenDamageSetReadyForInventario(currentCase, group.set)
     )
   }
 
@@ -2845,7 +2824,7 @@ function ExpedienteTab({ role, activeUser, currentCase, proformasData, onAddAddi
         <div className="action-strip wrap">
           {canAddDocuments && <button type="button" className="secondary" onClick={onAddAdditionalDocument}><FolderPlus size={16} /> Agregar documento</button>}
           {canAddDamage && <button type="button" className="secondary" onClick={onAddHiddenDamage}><FilePlus2 size={16} /> Agregar daño oculto</button>}
-          {canAddFiniquito && <button type="button" className="secondary" onClick={onAddFiniquito}><FileCheck2 size={16} /> Agregar finiquito</button>}
+          {canAddFiniquito && <button type="button" className="secondary" onClick={onAddFiniquito}><FileCheck2 size={16} /> Agregar compromiso pendiente</button>}
         </div>
       </div>
 
@@ -2989,7 +2968,7 @@ function DocumentPreviewModal({ document, onClose }) {
 function ProformasTab({ role, proformasData, selectedProformaId, currentCase, onSelectProforma, onRenameProforma, onLoadExcelDetail, onClearProformaDetail, onRequestAvailabilityValidation, onProformaLineChange, onPrepareSpecialOrder, onModal, onDrawer }) {
   const [proformaDrafts, setProformaDrafts] = useState({})
   const caseProformas = proformasData.filter((item) => item.caseId === currentCase.id)
-  const visibleProformas = role === 'Jefe de Enderezado' ? caseProformas.filter(isConfirmedValidProforma) : caseProformas
+  const visibleProformas = role === 'Jefatura técnica' ? caseProformas.filter(isConfirmedValidProforma) : caseProformas
   const selectedProforma = visibleProformas.find((item) => item.id === selectedProformaId) || visibleProformas[0]
   const hideOperationalButtons = isInitialProformaStage(currentCase.state)
   const selectedLines = selectedProforma?.lines || []
@@ -3002,10 +2981,10 @@ function ProformasTab({ role, proformasData, selectedProformaId, currentCase, on
   const selectedPELines = selectedPELinesForProforma(selectedProforma)
   const selectedProformaCanAdvance = hiddenDamageCanAdvanceInventory(currentCase, selectedProforma)
   const canEditLines = canEditProformaDetail(role, currentCase, selectedProforma)
-  const canConfirmAvailability = selectedProformaCanAdvance && (role === 'Administrador' || role === 'Bodega de Enderezado') && currentCase.state === 'En validación de disponibilidad' && !selectedProforma?.availabilityConfirmed
+  const canConfirmAvailability = selectedProformaCanAdvance && (role === 'Administrador funcional' || role === 'Inventario') && currentCase.state === 'En validación' && !selectedProforma?.availabilityConfirmed
   const showPEProcess = shouldShowPEProcessFields(role, currentCase, selectedProforma)
-  const canUseJefeActions = role === 'Administrador' || role === 'Jefe de Enderezado'
-  const canManagePESelection = selectedProformaCanAdvance && canUseJefeActions && currentCase.state === 'Pedido especial requerido' && isConfirmedValidProforma(selectedProforma) && !selectedProforma?.peGenerated
+  const canUseJefeActions = role === 'Administrador funcional' || role === 'Jefatura técnica'
+  const canManagePESelection = selectedProformaCanAdvance && canUseJefeActions && currentCase.state === 'Solicitud especial requerida' && isConfirmedValidProforma(selectedProforma) && !selectedProforma?.peGenerated
   const canPrepareSpecialOrder = canManagePESelection && missingTotal > 0 && !selectedProforma?.peSelectionEnabled
   const canGenerateSpecialOrder = canManagePESelection && selectedProforma?.peSelectionEnabled && selectedPELines.length > 0
   const summaryMetrics = [
@@ -3014,10 +2993,10 @@ function ProformasTab({ role, proformasData, selectedProformaId, currentCase, on
     ['Faltantes', missingTotal],
     ['Autorizados', authorizedTotal],
     ['No autorizados', unauthorizedTotal],
-    ...(showPEProcess ? [['Seleccionados PE', selectedPELines.reduce((sum, line) => sum + numericValue(line.missing), 0) || eligibleTotal]] : []),
+    ...(showPEProcess ? [['Seleccionados SE', selectedPELines.reduce((sum, line) => sum + numericValue(line.missing), 0) || eligibleTotal]] : []),
   ]
-  const baseColumns = ['Item', 'SKU', 'Descripción', 'Req.', 'Disp.', 'Faltante', 'Estado línea', 'Autorización seguro', 'Observación']
-  const peColumns = showPEProcess ? ['Solicitar PE', 'Decisión', 'Elegible PE', 'PE asociado'] : []
+  const baseColumns = ['Item', 'SKU', 'Descripción', 'Req.', 'Disp.', 'Faltante', 'Estado línea', 'Autorización administrativa', 'Observación']
+  const peColumns = showPEProcess ? ['Solicitar SE', 'Decisión', 'Elegible SE', 'Solicitud asociada'] : []
   const columns = [...baseColumns.slice(0, 8), ...peColumns, baseColumns[8]]
 
   function proformaDraftValue(item) {
@@ -3052,7 +3031,7 @@ function ProformasTab({ role, proformasData, selectedProformaId, currentCase, on
     if (!selectedProforma) return []
     return selectedLines.map((line, index) => {
       const baseCells = [
-        lineInput(index, 'item', line.item || '', 'text', role === 'Bodega de Enderezado'),
+        lineInput(index, 'item', line.item || '', 'text', role === 'Inventario'),
         lineInput(index, 'sku', line.sku || ''),
         lineInput(index, 'description', line.description || ''),
         lineInput(index, 'required', line.required, 'number'),
@@ -3089,23 +3068,23 @@ function ProformasTab({ role, proformasData, selectedProformaId, currentCase, on
   }
 
   function canEditProformaConsecutive(item) {
-    if (role === 'Administrador') return true
+    if (role === 'Administrador funcional') return true
     if (isConfirmedValidProforma(item)) return false
-    if (role === 'Jefe de Enderezado' || role === 'Responsable del caso') return true
-    return role === 'Bodega de Enderezado' && currentCase.state === 'En validación de disponibilidad' && !item.availabilityConfirmed
+    if (role === 'Jefatura técnica' || role === 'Responsable de atención') return true
+    return role === 'Inventario' && currentCase.state === 'En validación' && !item.availabilityConfirmed
   }
 
   function canLoadProformaDetail(item) {
     if (!can(role, 'Cargar Excel') || item.excelState !== 'Pendiente') return false
     if (!hiddenDamageCanAdvanceInventory(currentCase, item)) return false
-    return currentCase.state === 'En validación de disponibilidad'
+    return currentCase.state === 'En validación'
   }
 
   return (
     <div className="split-layout">
       <aside className="side-panel">
         <h3>Lista de proformas</h3>
-        {visibleProformas.length === 0 && <div className="notice">{role === 'Jefe de Enderezado' ? 'No hay proformas validas confirmadas para este rol.' : 'No hay proformas cargadas para este caso.'}</div>}
+        {visibleProformas.length === 0 && <div className="notice">{role === 'Jefatura técnica' ? 'No hay proformas validas confirmadas para este rol.' : 'No hay proformas cargadas para este caso.'}</div>}
         {visibleProformas.map((item) => (
           <article className={`proforma-item ${selectedProforma?.id === item.id ? 'active' : ''}`} key={item.id}>
             <div
@@ -3153,22 +3132,22 @@ function ProformasTab({ role, proformasData, selectedProformaId, currentCase, on
         </div>
         <div className="action-strip wrap">
           <a className="secondary proforma-template-link" href={proformaTemplateHref()} download="plantilla-detalle-proforma.csv"><Download size={16} /> Descargar plantilla</a>
-          {role !== 'Responsable del caso' && role !== 'Jefe de Enderezado' && currentCase.state !== 'En validación de disponibilidad' && can(role, 'Solicitar validacion disponibilidad') && <button type="button" className="primary" onClick={onRequestAvailabilityValidation}><ClipboardCheck size={16} /> Solicitar validacion</button>}
+          {role !== 'Responsable de atención' && role !== 'Jefatura técnica' && currentCase.state !== 'En validación' && can(role, 'Solicitar validacion disponibilidad') && <button type="button" className="primary" onClick={onRequestAvailabilityValidation}><ClipboardCheck size={16} /> Solicitar validacion</button>}
           {canConfirmAvailability && <button type="button" className="primary" onClick={() => onModal('Confirmar disponibilidad')}><CheckCircle2 size={16} /> Confirmar Disponibilidad</button>}
-          {canPrepareSpecialOrder && <button type="button" className="primary" onClick={() => onPrepareSpecialOrder(selectedProforma.id)}><Boxes size={16} /> Preparar Pedido Especial</button>}
-          {canGenerateSpecialOrder && <button type="button" className="primary" onClick={() => onModal('Generar PE')}><Boxes size={16} /> Generar Pedido Especial</button>}
+          {canPrepareSpecialOrder && <button type="button" className="primary" onClick={() => onPrepareSpecialOrder(selectedProforma.id)}><Boxes size={16} /> Preparar solicitud especial</button>}
+          {canGenerateSpecialOrder && <button type="button" className="primary" onClick={() => onModal('Generar solicitud especial')}><Boxes size={16} /> Generar solicitud especial</button>}
           {!hideOperationalButtons && can(role, 'Registrar disponibilidad') && <button type="button" className="secondary" onClick={() => onModal('Registrar disponibilidad')}><ClipboardCheck size={16} /> Disponibilidad</button>}
           {!hideOperationalButtons && can(role, 'Clasificar autorizado') && <button type="button" className="secondary" onClick={() => onModal('Clasificar autorizado')}><ShieldCheck size={16} /> Clasificar</button>}
-          {!hideOperationalButtons && role !== 'Jefe de Enderezado' && currentCase.state !== 'En validación de disponibilidad' && can(role, 'Decision operativa') && <button type="button" className="primary" onClick={() => onModal('Decision operativa')}><UserCog size={16} /> Decision operativa</button>}
-          {!hideOperationalButtons && role !== 'Administrador' && role !== 'Jefe de Enderezado' && can(role, 'Generar PE') && <button type="button" className="primary" onClick={() => onModal('Generar PE')}><Boxes size={16} /> Generar PE</button>}
+          {!hideOperationalButtons && role !== 'Jefatura técnica' && currentCase.state !== 'En validación' && can(role, 'Decision operativa') && <button type="button" className="primary" onClick={() => onModal('Decision operativa')}><UserCog size={16} /> Decision operativa</button>}
+          {!hideOperationalButtons && role !== 'Administrador funcional' && role !== 'Jefatura técnica' && can(role, 'Generar solicitud especial') && <button type="button" className="primary" onClick={() => onModal('Generar solicitud especial')}><Boxes size={16} /> Generar solicitud</button>}
           {!hideOperationalButtons && can(role, 'Ver errores') && <button type="button" className="secondary" onClick={() => onDrawer('Errores de carga Excel')}><AlertTriangle size={16} /> Errores</button>}
         </div>
         {!selectedProformaCanAdvance && (
-          <div className="notice"><AlertTriangle size={16} /> Complete y envie el expediente del daño oculto a Bodega para avanzar con disponibilidad o Pedido Especial.</div>
+          <div className="notice"><AlertTriangle size={16} /> Complete y envie el expediente del daño oculto a Inventario para avanzar con disponibilidad o Solicitud especial.</div>
         )}
-        {selectedProforma?.availabilityConfirmed && <div className="notice"><Lock size={16} /> Disponibilidad confirmada. El detalle queda bloqueado para Bodega.</div>}
-        {currentCase.otExecutionApproved && <div className="notice"><CheckCircle2 size={16} /> OT marcada en ejecucion por Jefe de Enderezado.</div>}
-        {selectedProforma?.peGenerated && <div className="notice"><Boxes size={16} /> Pedido Especial {selectedProforma.peId} generado para esta proforma. No se puede solicitar otro PE sobre el mismo consecutivo.</div>}
+        {selectedProforma?.availabilityConfirmed && <div className="notice"><Lock size={16} /> Disponibilidad confirmada. El detalle queda bloqueado para Inventario.</div>}
+        {currentCase.otExecutionApproved && <div className="notice"><CheckCircle2 size={16} /> Orden interna marcada en ejecucion por Jefatura técnica.</div>}
+        {selectedProforma?.peGenerated && <div className="notice"><Boxes size={16} /> Solicitud especial {selectedProforma.peId} generada para esta proforma. No se puede solicitar otra sobre el mismo consecutivo.</div>}
         <DataTable
           columns={columns}
           rows={lineRows()}
@@ -3178,12 +3157,12 @@ function ProformasTab({ role, proformasData, selectedProformaId, currentCase, on
   )
 }
 
-function CasePETab({ role, ordersData, currentCase, onOpenPE, onOpenPEBitacora, onRegisterJDE }) {
+function CasePETab({ role, ordersData, currentCase, onOpenPE, onOpenPEBitacora, onRegisterReference }) {
   const caseOrders = ordersData.filter((item) => item.caseId === currentCase.id)
   return (
     <div className="stack">
       <DataTable
-        columns={['PE', 'Proforma origen', 'Estado PE', 'Solicitud JDE', 'OC JDE', 'Fecha estimada', 'Disponibilidad', 'Lineas pendientes', '']}
+        columns={['SE', 'Proforma origen', 'Estado solicitud', 'Referencia externa', 'Orden de compra', 'Fecha estimada', 'Disponibilidad', 'Lineas pendientes', '']}
         rows={caseOrders.map((item) => [
           item.id,
           item.proforma,
@@ -3194,9 +3173,9 @@ function CasePETab({ role, ordersData, currentCase, onOpenPE, onOpenPEBitacora, 
           <Progress key="progress" value={item.availability} />,
           item.pendingLines,
           <div key="actions" className="row-actions">
-            <button type="button" className="row-action" onClick={() => onOpenPE(item)}>Abrir PE</button>
+            <button type="button" className="row-action" onClick={() => onOpenPE(item)}>Abrir solicitud</button>
             <button type="button" className="row-action" onClick={() => onOpenPEBitacora(item)}>Bitacora</button>
-            {canRegisterJdeForPE(role, item) && <button type="button" className="row-action" onClick={() => onRegisterJDE(item)}>JDE</button>}
+            {canRegisterReferenceForPE(role, item) && <button type="button" className="row-action" onClick={() => onRegisterReference(item)}>Referencia</button>}
           </div>,
         ])}
       />
@@ -3204,13 +3183,13 @@ function CasePETab({ role, ordersData, currentCase, onOpenPE, onOpenPEBitacora, 
   )
 }
 
-function OrdersList({ role, ordersData, filtersOpen, setFiltersOpen, onOpenPE, onOpenCase, onRegisterJDE }) {
+function OrdersList({ role, ordersData, filtersOpen, setFiltersOpen, onOpenPE, onOpenCase, onRegisterReference }) {
   return (
     <section className="content">
       <div className="section-head">
         <div>
-          <h2>Listado de Pedidos Especiales</h2>
-          <p>Cola operativa para Bodega de Enderezado y Compras.</p>
+          <h2>Listado de solicitudes especiales</h2>
+          <p>Cola operativa para Inventario, Compras y Logística.</p>
         </div>
         <div className="actions">
           <button type="button" className="secondary" onClick={() => setFiltersOpen(!filtersOpen)}>
@@ -3222,7 +3201,7 @@ function OrdersList({ role, ordersData, filtersOpen, setFiltersOpen, onOpenPE, o
         <FilterGrid filters={orderFilters} />
       )}
       <DataTable
-        columns={['PE', 'Caso', 'Cliente', 'Proforma', 'Estado PE', 'Solicitud JDE', 'OC JDE', 'Fecha estimada', 'Disponibilidad', 'Pendientes', '']}
+        columns={['SE', 'Caso', 'Cliente', 'Proforma', 'Estado solicitud', 'Referencia externa', 'Orden de compra', 'Fecha estimada', 'Disponibilidad', 'Pendientes', '']}
         rows={ordersData.map((item) => [
           item.id,
           item.caseId,
@@ -3235,8 +3214,8 @@ function OrdersList({ role, ordersData, filtersOpen, setFiltersOpen, onOpenPE, o
           <Progress key="progress" value={item.availability} />,
           item.pendingLines,
           <div key="actions" className="row-actions">
-            <button type="button" className="row-action" onClick={() => onOpenPE(item)}>Abrir PE</button>
-            {canRegisterJdeForPE(role, item) && <button type="button" className="row-action" onClick={() => onRegisterJDE(item)}>JDE</button>}
+            <button type="button" className="row-action" onClick={() => onOpenPE(item)}>Abrir solicitud</button>
+            {canRegisterReferenceForPE(role, item) && <button type="button" className="row-action" onClick={() => onRegisterReference(item)}>Referencia</button>}
             <button type="button" className="row-action" onClick={() => onOpenCase(cases[0])}>Caso</button>
           </div>,
         ])}
@@ -3251,30 +3230,30 @@ function PEWorkspace({ role, currentPE, peLinesData, tab, setTab, onModal, onOpe
   const peComplete = isPEComplete(currentPE)
   const hasOc = hasPEOC(currentPE)
   const hasSelectedLines = selectedOpenPELines(normalizedLines).length > 0
-  const canRegisterOC = (role === 'Compras' || role === 'Administrador') && !peComplete && currentPE.state === 'PE solicitado en JDE' && !hasOc
-  const canAssignDate = (role === 'Compras' || role === 'Administrador') && !peComplete && hasSelectedLines
+  const canRegisterOC = (role === 'Compras' || role === 'Administrador funcional') && !peComplete && currentPE.state === 'Referenciada externamente' && !hasOc
+  const canAssignDate = (role === 'Compras' || role === 'Administrador funcional') && !peComplete && hasSelectedLines
   const canShowConfirmPhysical = canManagePEReceipt(role) && !peComplete && hasSelectedLines
   const canConfirmPhysical = canShowConfirmPhysical && selectedPELinesReadyForReceipt(normalizedLines)
   const confirmPhysicalTitle = canConfirmPhysical ? 'Confirmar disponibilidad fisica' : 'Seleccione filas y capture Recibida > 0'
   return (
     <section className="workspace">
       <WorkspaceHeader
-        eyebrow="Workspace del Pedido Especial"
+        eyebrow="Workspace de la solicitud especial"
         title={currentPE.id}
         facts={[
           ['Estado', currentPE.state],
           ['Caso', currentPE.caseId],
           ['Cliente', currentPE.client],
           ['Proforma origen', currentPE.proforma],
-          ['Solicitud JDE', currentPE.jde],
-          ['OC JDE', currentPE.oc],
+          ['Referencia externa', currentPE.jde],
+          ['Orden de compra', currentPE.oc],
           ['Fecha estimada max.', currentPE.eta],
-          ['Disponibilidad PE', `${currentPE.availability}%`],
+          ['Disponibilidad solicitud', `${currentPE.availability}%`],
         ]}
         actions={(
           <>
-            {canRegisterJdeForPE(role, currentPE) && <button type="button" className="secondary" onClick={() => onModal('Registrar JDE / OC JDE')}><PenLine size={16} /> JDE</button>}
-            {canRegisterOC && <button type="button" className="primary" onClick={() => onModal('Registrar JDE / OC JDE')}><PenLine size={16} /> OC JDE</button>}
+            {canRegisterReferenceForPE(role, currentPE) && <button type="button" className="secondary" onClick={() => onModal('Registrar referencia / orden')}><PenLine size={16} /> Referencia</button>}
+            {canRegisterOC && <button type="button" className="primary" onClick={() => onModal('Registrar referencia / orden')}><PenLine size={16} /> orden de compra</button>}
             {canAssignDate && <button type="button" className="secondary" onClick={() => onModal('Cambiar fecha')}><CalendarClock size={16} /> Asignar fecha estimada</button>}
             {canShowConfirmPhysical && (
               <span className="action-tooltip" title={confirmPhysicalTitle}>
@@ -3310,8 +3289,8 @@ function PELinesTab({ role, currentPE, peLinesData, onToggleLine, onToggleAllLin
   const allSelected = openLines.length > 0 && openLines.every((line) => line.selected)
   const canUseSelection = canManagePEReceipt(role)
   const canEditReceived = canUseSelection && !readOnly
-  const canEditLineOC = (role === 'Compras' || role === 'Administrador' || role === 'Bodega de Enderezado') && !readOnly
-  const canEditWorkshopRequired = (role === 'Bodega de Enderezado' || role === 'Administrador') && !readOnly
+  const canEditLineOC = (role === 'Compras' || role === 'Administrador funcional' || role === 'Inventario') && !readOnly
+  const canEditWorkshopRequired = (role === 'Inventario' || role === 'Administrador funcional') && !readOnly
   const selectionHeader = (
     <label className="table-check" title="Seleccionar pendientes">
       <input
@@ -3324,10 +3303,10 @@ function PELinesTab({ role, currentPE, peLinesData, onToggleLine, onToggleAllLin
   )
   return (
     <div className="stack">
-      {!hasOc && role === 'Compras' && <div className="notice"><AlertTriangle size={16} /> Registre la OC JDE para habilitar fechas estimadas.</div>}
-      {readOnly && <div className="notice"><Lock size={16} /> Pedido Especial recibido completo. El detalle queda solo lectura.</div>}
+      {!hasOc && role === 'Compras' && <div className="notice"><AlertTriangle size={16} /> Registre la orden de compra para habilitar fechas estimadas.</div>}
+      {readOnly && <div className="notice"><Lock size={16} /> Solicitud especial recibida completa. El detalle queda solo lectura.</div>}
       <DataTable
-        columns={[...(canUseSelection ? [selectionHeader] : []), 'Linea', 'SKU', 'Descripcion', 'Solicitada', 'Recibida', 'Pendiente', 'Estado linea', 'Fecha estimada', 'Fecha recepcion', 'OC linea', 'Requerido por Taller', 'Usuario', 'Observacion']}
+        columns={[...(canUseSelection ? [selectionHeader] : []), 'Linea', 'SKU', 'Descripcion', 'Solicitada', 'Recibida', 'Pendiente', 'Estado linea', 'Fecha estimada', 'Fecha recepcion', 'Orden linea', 'Requerido por taller', 'Usuario', 'Observacion']}
         rows={peLinesData.map((line, index) => ({
           className: hasInvalidReceiptCapture(line) ? 'row-warning' : '',
           cells: [
@@ -3387,7 +3366,7 @@ function PELinesTab({ role, currentPE, peLinesData, onToggleLine, onToggleAllLin
 }
 
 function AdminView({ role, usersCatalog, reasonCatalogs, onAddUser, onUpdateUser, onAddReason, onUpdateReason }) {
-  const canEdit = role === 'Administrador'
+  const canEdit = role === 'Administrador funcional'
   const dateChangeReasons = reasonCatalogs.dateChangeReasons || []
 
   return (
@@ -3397,7 +3376,7 @@ function AdminView({ role, usersCatalog, reasonCatalogs, onAddUser, onUpdateUser
           <h2>Administracion</h2>
           <p>Catalogos dinamicos del mockup. Los estados y tipos operativos permanecen fijos por sistema.</p>
         </div>
-        <Pill tone={role === 'Administrador' ? 'green' : 'gray'}>{role === 'Administrador' ? 'Edicion habilitada' : 'Vista restringida'}</Pill>
+        <Pill tone={role === 'Administrador funcional' ? 'green' : 'gray'}>{role === 'Administrador funcional' ? 'Edicion habilitada' : 'Vista restringida'}</Pill>
       </div>
       <div className="admin-config-grid">
         <section className="admin-panel">
@@ -3438,7 +3417,7 @@ function AdminView({ role, usersCatalog, reasonCatalogs, onAddUser, onUpdateUser
               <CalendarClock size={18} />
               <div>
                 <h3>Motivos de cambio de fecha</h3>
-                <p>Opciones disponibles en el modal Cambiar fecha del Pedido Especial.</p>
+                <p>Opciones disponibles en el modal Cambiar fecha de la solicitud especial.</p>
               </div>
             </div>
             <button type="button" className="secondary" disabled={!canEdit} onClick={onAddReason}><Plus size={16} /> Agregar motivo</button>
@@ -3588,7 +3567,7 @@ function Modal({ name, role, currentCase, currentProforma, currentPE, peLinesDat
     insurer: 'INISER',
     ot: '',
     proforma: '',
-    jde: currentPE?.jde && currentPE.jde !== 'Sin JDE' ? currentPE.jde : '',
+    jde: currentPE?.jde && currentPE.jde !== 'Sin referencia' ? currentPE.jde : '',
     oc: currentPE?.oc && currentPE.oc !== '-' ? currentPE.oc : '',
     newDate: '',
     reason: dateChangeReasons[0] || 'Proveedor',
@@ -3614,28 +3593,28 @@ function Modal({ name, role, currentCase, currentProforma, currentPE, peLinesDat
   })
   const isCreateCase = name === 'Crear caso'
   const isAddDocument = name === 'Agregar documento al expediente'
-  const isFiniquito = name === 'Agregar finiquito'
+  const isFiniquito = name === 'Agregar compromiso pendiente'
   const isHiddenDamage = name === 'Agregar daño oculto'
   const isConfirmAvailability = name === 'Confirmar disponibilidad'
-  const isGeneratePE = name === 'Generar PE'
-  const isRegisterJDE = name === 'Registrar JDE / OC JDE'
+  const isGenerateSE = name === 'Generar solicitud especial'
+  const isRegisterReference = name === 'Registrar referencia / orden'
   const isConfirmPhysical = name === 'Confirmar disponibilidad fisica y cantidades'
   const isRevertReception = name === 'Revertir ultima confirmacion'
-  const isProceedOT = name === 'Proceder con OT'
+  const isProceedOT = name === 'Continuar reparación'
   const canCreateCase = !isCreateCase || formValues.ot.trim() || formValues.proforma.trim()
   const canAddDocument = !isAddDocument || (formValues.documentTitle.trim() && formValues.documentReference.trim() && formValues.documentFileName.trim())
   const canAddFiniquito = true
   const canAddHiddenDamage = !isHiddenDamage || Boolean(formValues.hiddenDamageReason.trim())
   const canConfirmAvailability = !isConfirmAvailability || hiddenDamageCanAdvanceInventory(currentCase, currentProforma)
   const canConfirmPhysical = !isConfirmPhysical || selectedPELinesReadyForReceipt(peLinesData)
-  const canGeneratePE = !isGeneratePE || selectedPELinesForProforma(currentProforma).length > 0
-  const registeringJde = role === 'Bodega de Enderezado' || (role === 'Administrador' && currentPE?.state === 'Generado')
-  const canRegisterJDE = !isRegisterJDE || (registeringJde ? Boolean(formValues.jde.trim()) : Boolean(formValues.oc.trim()))
+  const canGenerateSE = !isGenerateSE || selectedPELinesForProforma(currentProforma).length > 0
+  const registeringReference = role === 'Inventario' || (role === 'Administrador funcional' && currentPE?.state === 'Generada')
+  const canRegisterReference = !isRegisterReference || (registeringReference ? Boolean(formValues.jde.trim()) : Boolean(formValues.oc.trim()))
   const canRevertReception = !isRevertReception || (lastReceptionSnapshot?.peId === currentPE?.id && isReceptionSnapshotActive(lastReceptionSnapshot))
   const canProceedOT = !isProceedOT || hasOTReference(currentCase) || Boolean(formValues.otExecutionNumber.trim())
-  const canConfirm = canCreateCase && canAddDocument && canAddFiniquito && canAddHiddenDamage && canConfirmAvailability && canConfirmPhysical && canGeneratePE && canRegisterJDE && canRevertReception && canProceedOT
+  const canConfirm = canCreateCase && canAddDocument && canAddFiniquito && canAddHiddenDamage && canConfirmAvailability && canConfirmPhysical && canGenerateSE && canRegisterReference && canRevertReception && canProceedOT
   const body = getModalBody(name, role, formValues, setFormValues, currentPE, currentCase, currentProforma, peLinesData, lastReceptionSnapshot, dateChangeReasons)
-  const confirmLabel = name === 'Marcar expediente como completo' ? 'Procesar' : name === 'Cerrar caso' ? 'Procesar' : name === 'Proceder con OT' ? 'Proceder con OT' : isRegisterJDE ? (registeringJde ? 'Confirmar solicitud JDE' : 'Registrar OC JDE') : isGeneratePE ? 'Generar Pedido Especial' : isConfirmAvailability ? 'Confirmar Disponibilidad' : name === 'Cambiar fecha' ? 'Asignar fecha' : name === 'Confirmar disponibilidad fisica y cantidades' ? 'Procesar' : name === 'Revertir ultima confirmacion' ? 'Revertir confirmación' : isCreateCase ? 'Crear caso demo' : isAddDocument ? 'Agregar documento' : isFiniquito ? 'Aplicar finiquito' : isHiddenDamage ? 'Agregar daño oculto' : 'Guardar'
+  const confirmLabel = name === 'Marcar expediente como completo' ? 'Procesar' : name === 'Cerrar caso' ? 'Procesar' : name === 'Continuar reparación' ? 'Continuar reparación' : isRegisterReference ? (registeringReference ? 'Confirmar referencia' : 'Registrar orden de compra') : isGenerateSE ? 'Generar solicitud especial' : isConfirmAvailability ? 'Confirmar Disponibilidad' : name === 'Cambiar fecha' ? 'Asignar fecha' : name === 'Confirmar disponibilidad fisica y cantidades' ? 'Procesar' : name === 'Revertir ultima confirmacion' ? 'Revertir confirmación' : isCreateCase ? 'Crear caso demo' : isAddDocument ? 'Agregar documento' : isFiniquito ? 'Aplicar compromiso pendiente' : isHiddenDamage ? 'Agregar daño oculto' : 'Guardar'
   function confirmAndClose() {
     onConfirm(name, formValues)
     onClose()
@@ -3669,7 +3648,7 @@ function getModalBody(name, role, formValues, setFormValues, currentPE, currentC
   if (name === 'Agregar documento al expediente') {
     return <AddDocumentFields values={formValues} setValues={setFormValues} />
   }
-  if (name === 'Agregar finiquito') {
+  if (name === 'Agregar compromiso pendiente') {
     return <FiniquitoFields values={formValues} setValues={setFormValues} currentCase={currentCase} />
   }
   if (name === 'Agregar daño oculto') {
@@ -3685,7 +3664,7 @@ function getModalBody(name, role, formValues, setFormValues, currentPE, currentC
       return (
         <div className="notice">
           <AlertTriangle size={16} />
-          Para avanzar con una proforma de daño oculto debe estar completo el expediente minimo y enviado a Bodega.
+          Para avanzar con una proforma de daño oculto debe estar completo el expediente minimo y enviado a Inventario.
         </div>
       )
     }
@@ -3694,8 +3673,8 @@ function getModalBody(name, role, formValues, setFormValues, currentPE, currentC
         <div className="notice">
           <AlertTriangle size={16} />
           {complete
-            ? `La disponibilidad de ${currentProforma?.id || 'la proforma'} esta al 100%. Al confirmar, el detalle quedara bloqueado para Bodega, se notificara a Jefe de Enderezado que se puede proceder con la reparacion y se enviara notificacion al Responsable del caso.`
-            : `La disponibilidad de ${currentProforma?.id || 'la proforma'} es ${availability}%. Al confirmar, el detalle quedara bloqueado para Bodega y se notificara a Jefe de Enderezado para aprobar los items sin disponibilidad para Pedido Especial.`}
+            ? `La disponibilidad de ${currentProforma?.id || 'la proforma'} esta al 100%. Al confirmar, el detalle quedara bloqueado para Inventario, se notificara a Jefatura técnica que se puede proceder con la reparacion y se enviara notificacion al Responsable de atención.`
+            : `La disponibilidad de ${currentProforma?.id || 'la proforma'} es ${availability}%. Al confirmar, el detalle quedara bloqueado para Inventario y se notificara a Jefatura técnica para aprobar los items sin disponibilidad para Solicitud especial.`}
         </div>
       </div>
     )
@@ -3703,7 +3682,7 @@ function getModalBody(name, role, formValues, setFormValues, currentPE, currentC
   if (name === 'Decision operativa') {
     return <ModalFields fields={['Linea no autorizada', 'Codigo / descripcion', 'Cantidad requerida', 'Motivo de no autorizacion', 'Decision', 'Comentario']} />
   }
-  if (name === 'Generar PE') {
+  if (name === 'Generar solicitud especial') {
     const selectedLines = selectedPELinesForProforma(currentProforma)
     const unauthorizedSelected = selectedLines.filter((line) => line.authorization === 'No autorizado').length
     const unselectedMissing = unselectedMissingLinesForProforma(currentProforma).length
@@ -3712,34 +3691,34 @@ function getModalBody(name, role, formValues, setFormValues, currentPE, currentC
         <div className="notice">
           <AlertTriangle size={16} />
           {unauthorizedSelected > 0
-            ? `Se generara un Pedido Especial para ${selectedLines.length} item(s), incluyendo ${unauthorizedSelected} item(s) no autorizados por el seguro.`
-            : `Se generara un Pedido Especial para ${selectedLines.length} item(s) seleccionados de la proforma ${currentProforma?.id || ''}.`}
+            ? `Se generara una solicitud especial para ${selectedLines.length} item(s), incluyendo ${unauthorizedSelected} item(s) sin autorizacion administrativa.`
+            : `Se generara una solicitud especial para ${selectedLines.length} item(s) seleccionados de la proforma ${currentProforma?.id || ''}.`}
           {unselectedMissing > 0 ? ` Al confirmar, los ${unselectedMissing} item(s) faltantes no marcados no podran solicitarse nuevamente sobre esta misma proforma.` : ''}
         </div>
       </div>
     )
   }
-  if (name === 'Proceder con OT') {
+  if (name === 'Continuar reparación') {
     const otContext = otReferenceContextForExecution(currentCase)
     return (
       <div className="stack">
         <div className="notice">
           <AlertTriangle size={16} />
-          Al confirmar se marcara la OT como en ejecucion. Los usuarios asociados al caso veran que el vehiculo ya se encuentra en taller.
+          Al confirmar se marcara la orden interna como en ejecucion. Los usuarios asociados al caso veran que la unidad ya se encuentra en atención técnica.
         </div>
         {!hasOTReference(currentCase) && (
           <div className="modal-fields">
             <label className="span-2">
               <span>Numero de {otContext.label}</span>
-              <input value={formValues.otExecutionNumber} onChange={(event) => updateValue(setFormValues, 'otExecutionNumber', event.target.value)} placeholder="OT-10245" />
+              <input value={formValues.otExecutionNumber} onChange={(event) => updateValue(setFormValues, 'otExecutionNumber', event.target.value)} placeholder="OI-10245" />
             </label>
           </div>
         )}
       </div>
     )
   }
-  if (name === 'Registrar JDE / OC JDE') {
-    return <JDEFields role={role} values={formValues} setValues={setFormValues} currentPE={currentPE} />
+  if (name === 'Registrar referencia / orden') {
+    return <ReferenceFields role={role} values={formValues} setValues={setFormValues} currentPE={currentPE} />
   }
   if (name === 'Cambiar fecha') {
     return <DateFields values={formValues} setValues={setFormValues} currentPE={currentPE} peLinesData={peLinesData} reasons={dateChangeReasons} />
@@ -3751,17 +3730,17 @@ function getModalBody(name, role, formValues, setFormValues, currentPE, currentC
     return <RevertReceptionFields snapshot={lastReceptionSnapshot} />
   }
   if (name === 'Solicitar aprobacion de correo') {
-    return <ModalFields fields={['Caso', 'Finiquito', 'PE asociado', 'Cambio de fecha', 'Cliente', 'Correo cliente', 'Aprobador: Responsable del caso', 'Vista previa del correo']} />
+    return <ModalFields fields={['Caso', 'Compromiso pendiente', 'Solicitud asociada', 'Cambio de fecha', 'Cliente', 'Correo cliente', 'Aprobador: Responsable de atención', 'Vista previa del correo']} />
   }
   if (name === 'Validar cierre') {
-    return <ModalFields fields={['Checklist de pendientes', 'Motivos de bloqueo', 'Boton cerrar caso deshabilitado']} notice="El cierre queda bloqueado mientras existan PE, lineas parciales o finiquitos abiertos." />
+    return <ModalFields fields={['Checklist de pendientes', 'Motivos de bloqueo', 'Boton cerrar caso deshabilitado']} notice="El cierre queda bloqueado mientras existan SE, lineas parciales o compromiso pendientes abiertos." />
   }
   if (name === 'Marcar expediente como completo') {
     return (
       <div className="stack">
         <div className="notice">
           <AlertTriangle size={16} />
-          Una vez confirmado, el caso pasara a En validación de disponibilidad y se enviara la solicitud al equipo de Bodega para subir el detalle de la proforma y confirmar disponibilidad.
+          Una vez confirmado, el caso pasara a En validación y se enviara la solicitud al equipo de Inventario para subir el detalle de la proforma y confirmar disponibilidad.
         </div>
       </div>
     )
@@ -3774,7 +3753,7 @@ function getModalBody(name, role, formValues, setFormValues, currentPE, currentC
       </div>
     )
   }
-  return <ModalFields fields={['Caso / PE', 'Responsable', 'Fecha/hora', 'Comentario', `Rol activo: ${role}`]} />
+  return <ModalFields fields={['Caso / SE', 'Responsable', 'Fecha/hora', 'Comentario', `Rol activo: ${role}`]} />
 }
 
 function updateValue(setValues, key, value) {
@@ -3799,7 +3778,7 @@ function CreateCaseFields({ values, setValues }) {
         </label>
         <label>
           <span>Vehiculo</span>
-          <input value={values.vehicle} onChange={(event) => updateValue(setValues, 'vehicle', event.target.value)} placeholder="Toyota Hilux 2023" />
+          <input value={values.vehicle} onChange={(event) => updateValue(setValues, 'vehicle', event.target.value)} placeholder="Unidad SUV 2024" />
         </label>
         <label>
           <span>Placa</span>
@@ -3811,20 +3790,20 @@ function CreateCaseFields({ values, setValues }) {
         </label>
         {!values.clientAssumes && (
           <label>
-            <span>Aseguradora</span>
+            <span>Autorización administrativa</span>
             <select value={values.insurer} onChange={(event) => updateValue(setValues, 'insurer', event.target.value)}>
-              <option value="INISER">INISER</option>
-              <option value="ASSA">ASSA</option>
-              <option value="SEGUROS AMERICA">SEGUROS AMERICA</option>
+              <option value="Autorización cargada">Autorización cargada</option>
+              <option value="Autorización verbal">Autorización verbal</option>
+              <option value="Pendiente administrativo">Pendiente administrativo</option>
             </select>
           </label>
         )}
         <label>
-          <span>Numero de OT</span>
+          <span>Número de orden interna</span>
           <input
             value={values.ot}
             onChange={(event) => updateValue(setValues, 'ot', event.target.value)}
-            placeholder="OT-10245"
+            placeholder="OI-10245"
           />
         </label>
         <label>
@@ -3832,7 +3811,7 @@ function CreateCaseFields({ values, setValues }) {
           <input
             value={values.proforma}
             onChange={(event) => updateValue(setValues, 'proforma', event.target.value)}
-            placeholder="PF-001"
+            placeholder="PR-001"
           />
         </label>
         <label>
@@ -3841,7 +3820,7 @@ function CreateCaseFields({ values, setValues }) {
         </label>
       </div>
       {!values.ot.trim() && !values.proforma.trim() && (
-        <div className="notice"><AlertTriangle size={16} /> Debe ingresar numero de OT o numero de proforma para crear el caso.</div>
+        <div className="notice"><AlertTriangle size={16} /> Debe ingresar numero de orden interna o numero de proforma para crear el caso.</div>
       )}
     </>
   )
@@ -3863,7 +3842,7 @@ function AddDocumentFields({ values, setValues }) {
         </label>
         <label>
           <span>Nombre del documento</span>
-          <input value={values.documentTitle} onChange={(event) => updateValue(setValues, 'documentTitle', event.target.value)} placeholder="Ej. Foto de soporte, Carta de aseguradora" />
+          <input value={values.documentTitle} onChange={(event) => updateValue(setValues, 'documentTitle', event.target.value)} placeholder="Ej. Foto de soporte, autorización o correo" />
         </label>
         <label>
           <span>Número de referencia</span>
@@ -3894,19 +3873,19 @@ function FiniquitoFields({ values, setValues, currentCase }) {
           <input readOnly value={currentCase?.id || ''} />
         </label>
         <label>
-          <span>Referencia de finiquito</span>
-          <input value={values.finiquitoReference} onChange={(event) => updateValue(setValues, 'finiquitoReference', event.target.value)} placeholder={`FIN-${currentCase?.id?.replace('CP-', '') || '000000'}`} />
+          <span>Referencia de compromiso</span>
+          <input value={values.finiquitoReference} onChange={(event) => updateValue(setValues, 'finiquitoReference', event.target.value)} placeholder={`COM-${currentCase?.id?.replace('CS-', '') || '000000'}`} />
         </label>
         <label className="span-2">
           <span>Descripción</span>
-          <input value={values.finiquitoDescription} onChange={(event) => updateValue(setValues, 'finiquitoDescription', event.target.value)} placeholder="Finiquito aplicado al expediente del caso" />
+          <input value={values.finiquitoDescription} onChange={(event) => updateValue(setValues, 'finiquitoDescription', event.target.value)} placeholder="Compromiso documentado al expediente del caso" />
         </label>
         <label className="span-2">
-          <span>Documento de finiquito opcional</span>
+          <span>Documento de compromiso opcional</span>
           <input type="file" onChange={(event) => updateValue(setValues, 'finiquitoFileName', event.target.files?.[0]?.name || '')} />
         </label>
       </div>
-      {!values.finiquitoFileName.trim() && <div className="notice"><AlertTriangle size={16} /> El finiquito quedara registrado sin adjunto; puede cargarse el soporte después desde la bandeja documental.</div>}
+      {!values.finiquitoFileName.trim() && <div className="notice"><AlertTriangle size={16} /> El compromiso quedara registrado sin adjunto; puede cargarse el soporte después desde la bandeja documental.</div>}
     </>
   )
 }
@@ -3925,7 +3904,7 @@ function HiddenDamageFields({ values, setValues }) {
         </label>
         <label>
           <span>Proforma daño oculto</span>
-          <input value={values.hiddenDamageProforma} onChange={(event) => updateValue(setValues, 'hiddenDamageProforma', event.target.value)} placeholder="PF-DO-001" />
+          <input value={values.hiddenDamageProforma} onChange={(event) => updateValue(setValues, 'hiddenDamageProforma', event.target.value)} placeholder="PR-DO-001" />
         </label>
         <label>
           <span>Archivo proforma</span>
@@ -3934,49 +3913,49 @@ function HiddenDamageFields({ values, setValues }) {
         {!values.clientAssumes && (
           <>
             <label>
-              <span>OC del seguro</span>
-              <input value={values.hiddenDamageOC} onChange={(event) => updateValue(setValues, 'hiddenDamageOC', event.target.value)} placeholder="OCS-DO-001" />
+              <span>Autorización administrativa</span>
+              <input value={values.hiddenDamageOC} onChange={(event) => updateValue(setValues, 'hiddenDamageOC', event.target.value)} placeholder="AUT-DO-001" />
             </label>
             <label>
-              <span>Archivo OC seguro</span>
+              <span>Archivo de autorización</span>
               <input type="file" onChange={(event) => updateValue(setValues, 'hiddenDamageOCFileName', event.target.files?.[0]?.name || '')} />
             </label>
           </>
         )}
         <label>
-          <span>OT opcional</span>
-          <input value={values.hiddenDamageOT} onChange={(event) => updateValue(setValues, 'hiddenDamageOT', event.target.value)} placeholder="OT-DO-001" />
+          <span>Orden interna opcional</span>
+          <input value={values.hiddenDamageOT} onChange={(event) => updateValue(setValues, 'hiddenDamageOT', event.target.value)} placeholder="OI-DO-001" />
         </label>
         <label>
-          <span>Archivo OT opcional</span>
+          <span>Archivo de orden interna opcional</span>
           <input type="file" onChange={(event) => updateValue(setValues, 'hiddenDamageOTFileName', event.target.files?.[0]?.name || '')} />
         </label>
       </div>
       {!values.hiddenDamageReason.trim() && <div className="notice"><AlertTriangle size={16} /> El motivo del daño oculto es obligatorio. Los documentos pueden quedar pendientes.</div>}
       {values.hiddenDamageReason.trim() && (!values.hiddenDamageProformaFileName.trim() || (!values.clientAssumes && !values.hiddenDamageOCFileName.trim())) && (
-        <div className="notice"><AlertTriangle size={16} /> Podra crear el daño oculto, pero no avanzara a detalle, disponibilidad o PE hasta cargar {values.clientAssumes ? 'Proforma' : 'Proforma y OC del seguro'}.</div>
+        <div className="notice"><AlertTriangle size={16} /> Podra crear el daño oculto, pero no avanzara a detalle, disponibilidad o solicitud especial hasta cargar {values.clientAssumes ? 'Proforma' : 'Proforma y autorización administrativa'}.</div>
       )}
     </>
   )
 }
 
-function JDEFields({ role, values, setValues, currentPE }) {
-  if (role === 'Bodega de Enderezado' || (role === 'Administrador' && currentPE?.state === 'Generado')) {
+function ReferenceFields({ role, values, setValues, currentPE }) {
+  if (role === 'Inventario' || (role === 'Administrador funcional' && currentPE?.state === 'Generada')) {
     return (
       <div className="stack">
         <div className="modal-fields">
           <label>
-            <span>PE</span>
+            <span>Solicitud</span>
             <input readOnly value={currentPE?.id || ''} />
           </label>
           <label>
-            <span>Solicitud JDE</span>
-            <input value={values.jde} onChange={(event) => updateValue(setValues, 'jde', event.target.value)} placeholder="98765" />
+            <span>Referencia externa</span>
+            <input value={values.jde} onChange={(event) => updateValue(setValues, 'jde', event.target.value)} placeholder="EXT-88031" />
           </label>
         </div>
         <div className="notice">
           <AlertTriangle size={16} />
-          Al confirmar, el PE pasara a PE solicitado en JDE, el caso quedara en Pedido especial en seguimiento y se notificara a Compras para generar la OC correspondiente.
+          Al confirmar, la solicitud pasara a referenciada externamente, el caso quedara en seguimiento y se notificara a Compras para registrar la orden de compra.
         </div>
       </div>
     )
@@ -3985,16 +3964,16 @@ function JDEFields({ role, values, setValues, currentPE }) {
     <div className="stack">
       <div className="modal-fields">
         <label>
-          <span>PE</span>
+          <span>Solicitud</span>
           <input readOnly value={currentPE?.id || ''} />
         </label>
         <label>
-          <span>Solicitud JDE</span>
+          <span>Referencia externa</span>
           <input readOnly value={currentPE?.jde || ''} />
         </label>
         <label>
-          <span>OC JDE</span>
-          <input value={values.oc} onChange={(event) => updateValue(setValues, 'oc', event.target.value)} placeholder="OC-4455" />
+          <span>Orden de compra</span>
+          <input value={values.oc} onChange={(event) => updateValue(setValues, 'oc', event.target.value)} placeholder="OC-2410-031" />
         </label>
         <label>
           <span>Comentario</span>
@@ -4003,7 +3982,7 @@ function JDEFields({ role, values, setValues, currentPE }) {
       </div>
       <div className="notice">
         <AlertTriangle size={16} />
-        La OC JDE habilitara la asignacion de fechas estimadas por linea del Pedido Especial.
+        La orden de compra habilitara la asignacion de fechas estimadas por linea de la solicitud especial.
       </div>
     </div>
   )
@@ -4050,7 +4029,7 @@ function ReceptionFields({ values, setValues, currentPE, currentCase, peLinesDat
     <div className="stack">
       <div className="notice">
         <AlertTriangle size={16} />
-        Confirme solo si esta 100% seguro de que los repuestos marcados ya estan disponibles fisicamente. Se actualizaran {selectedLines.length} linea(s), el Pedido Especial y la disponibilidad del caso.
+        Confirme solo si esta 100% seguro de que los repuestos marcados ya estan disponibles fisicamente. Se actualizaran {selectedLines.length} linea(s), la solicitud especial y la disponibilidad del caso.
       </div>
       {earlyLines.length > 0 && (
         <div className="notice">
@@ -4062,7 +4041,7 @@ function ReceptionFields({ values, setValues, currentPE, currentCase, peLinesDat
         <>
           <div className="notice">
             <AlertTriangle size={16} />
-            Este caso tiene finiquito activo. La confirmacion enviara un correo automatico al cliente.
+            Este caso tiene compromiso pendiente activo. La confirmacion enviara un correo automatico al cliente.
           </div>
           <div className="notice">
             <AlertTriangle size={16} />
@@ -4072,7 +4051,7 @@ function ReceptionFields({ values, setValues, currentPE, currentCase, peLinesDat
       )}
       <div className="modal-fields">
         <label>
-          <span>PE</span>
+          <span>Solicitud</span>
           <input readOnly value={currentPE?.id || ''} />
         </label>
         <label>
@@ -4094,7 +4073,7 @@ function RevertReceptionFields({ snapshot }) {
     <div className="stack">
       <div className="notice">
         <AlertTriangle size={16} />
-        Esta acción regresara el Pedido Especial, sus lineas y la disponibilidad del caso al estado previo de la última confirmación física.
+        Esta acción regresara la solicitud especial, sus lineas y la disponibilidad del caso al estado previo de la última confirmación física.
       </div>
       <div className="notice">
         <AlertTriangle size={16} />
@@ -4102,7 +4081,7 @@ function RevertReceptionFields({ snapshot }) {
       </div>
       <div className="modal-fields">
         <label>
-          <span>PE</span>
+          <span>Solicitud</span>
           <input readOnly value={snapshot?.peId || ''} />
         </label>
         <label>
@@ -4161,7 +4140,7 @@ function drawerContent(name, role, bitacoraData, entityScope, entityId) {
   if (name === 'Errores de carga Excel') {
     return (
       <div className="stack">
-        <StatusLine label="Visibilidad" value={role === 'Bodega de Enderezado' || role === 'Administrador' ? 'Permitida' : 'Consulta limitada'} tone="orange" />
+        <StatusLine label="Visibilidad" value={role === 'Inventario' || role === 'Administrador funcional' ? 'Permitida' : 'Consulta limitada'} tone="orange" />
         <DataTable columns={['Fila', 'Campo', 'Error']} rows={[['12', 'SKU', 'Fila con SKU vacio'], ['18', 'Cantidad', 'Cantidad invalida']]} />
       </div>
     )
@@ -4169,16 +4148,16 @@ function drawerContent(name, role, bitacoraData, entityScope, entityId) {
   if (name === 'Bloqueos de cierre') {
     return (
       <ul className="drawer-list">
-        <li><Lock size={16} /> PE-00045 esta en seguimiento.</li>
-        <li><Lock size={16} /> PF-001 / Item 12 esta Parcial.</li>
-        <li><Lock size={16} /> FIN-0007 esta abierto.</li>
+        <li><Lock size={16} /> SE-00045 esta en seguimiento.</li>
+        <li><Lock size={16} /> PR-2410-77 / Item 12 esta Parcial.</li>
+        <li><Lock size={16} /> COM-0007 esta abierto.</li>
       </ul>
     )
   }
-  if (name === 'Documento de finiquito') {
-    return <div className="document-preview-large"><FileCheck2 size={42} /><strong>FIN-0007</strong><span>Documento de finiquito abierto asociado al caso.</span></div>
+  if (name === 'Documento de compromiso pendiente') {
+    return <div className="document-preview-large"><FileCheck2 size={42} /><strong>COM-0007</strong><span>Documento de compromiso pendiente asociado al caso.</span></div>
   }
-  if (name === 'Bitacora del PE' || name === 'Historial del caso') {
+  if (name === 'Bitacora de la solicitud' || name === 'Historial del caso') {
     const rows = bitacoraData
       .filter((entry) => entry.scope === entityScope && entry.entityId === entityId)
       .map((entry) => entry.row)
@@ -4197,8 +4176,8 @@ function drawerContent(name, role, bitacoraData, entityScope, entityId) {
       columns={['Fecha/hora', 'Evento', 'Usuario']}
       rows={[
         ['18/06/2026 10:15', 'Recepcion parcial registrada', 'Compras'],
-        ['17/06/2026 14:20', 'OC JDE registrada', 'Bodega'],
-        ['16/06/2026 09:30', 'Excel importado', 'Bodega'],
+        ['17/06/2026 14:20', 'Orden de compra registrada', 'Inventario'],
+        ['16/06/2026 09:30', 'Excel importado', 'Inventario'],
       ]}
     />
   )
